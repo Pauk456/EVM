@@ -21,4 +21,4 @@ else()
 endif()
 
 # описываем исполняемый файл основной программы: это main.cpp + основная библиотека
-add_executable(${exe_name} main.cpp)
+add_executable(${exe_name} main.cpp "createRandomArr.cpp")

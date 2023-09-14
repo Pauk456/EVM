@@ -8,7 +8,7 @@ int main() {
 	struct timespec start, end;
 	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
 
-	/*ifstream input("input.txt");
+	ifstream input("input.txt");
 	vector<int> arr;
 	int numb;
 
@@ -26,13 +26,10 @@ int main() {
 		}
 	}
 
-	input.close();
+	cout << "Array is soreted\n";
 
-	clock_gettime(CLOCK_MONOTONIC_RAW, &end);*/
-	int c = 0;
-	for (int i = 0; i < 1000000; i++) {
-		c++;
-	}
+	input.close();
+	clock_gettime(CLOCK_MONOTONIC_RAW, &end);
 	printf("Time taken: %lf sec.\n",
 		end.tv_sec - start.tv_sec + 0.000000001 * (end.tv_nsec - start.tv_nsec));
 }
