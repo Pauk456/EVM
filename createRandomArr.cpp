@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 
 using namespace std;
 
@@ -8,8 +9,8 @@ int main(int argc, char *argv[]) {
 		cout << "Error";
 	}
 
-	int N = (int)*argv[1];
-	ofstream output("rand_arr.txt");
+	int N = atoi(argv[1]);
+	ofstream output("TextArr.txt");
 	for (int i = 0; i < N; i++) {
 		output << rand() << ' ';
 	}

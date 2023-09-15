@@ -8,7 +8,7 @@ int main() {
 	struct timespec start, end;
 	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
 
-	ifstream input("input.txt");
+	ifstream input("TextArr.txt");
 	vector<int> arr;
 	int numb;
 
