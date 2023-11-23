@@ -1,0 +1,4 @@
+C:/Users/456pa/source/repos/EVM/Lab7/out/build/x64-Debug/CMakeFiles/Matrix.dir
+C:/Users/456pa/source/repos/EVM/Lab7/out/build/x64-Debug/CMakeFiles/Lab7.dir
+C:/Users/456pa/source/repos/EVM/Lab7/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+C:/Users/456pa/source/repos/EVM/Lab7/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
