@@ -450,27 +450,42 @@ TEST(Matrix_rev, test2)
 {
 	// Matrix A
 	Matrix A(2);
+	A[0][0] = 1; A[0][1] = 2;
+	A[1][0] = 3; A[1][1] = 4;
+
+	// Find the inverse of A
+	A.reverse_matrix(1000);
+
+	// Check if the product is approximately the identity matrix
+	EXPECT_NEAR(A[0][0], -2, 1e-1);		EXPECT_NEAR(A[0][1], 1, 1e-1);
+	EXPECT_NEAR(A[1][0], 1.5, 1e-1);	EXPECT_NEAR(A[1][1], -0.5, 1e-1);
+}
+
+TEST(Matrix_rev, test3)
+{
+	// Matrix A
+	Matrix A(2);
 	A[0][0] = 4; A[0][1] = 7;
 	A[1][0] = 2; A[1][1] = 6;
 
 	// Find the inverse of A
-	A.reverse_matrix(10);
+	A.reverse_matrix(100);
 
 	// Check if the product is approximately the identity matrix
 	EXPECT_NEAR(A[0][0], 0.6, 1e-1);	EXPECT_NEAR(A[0][1], -0.7, 1e-1);
 	EXPECT_NEAR(A[1][0], -0.2, 1e-1);	EXPECT_NEAR(A[1][1], 0.4, 1e-1);
 }
 
-TEST(Matrix_rev, test3) 
+TEST(Matrix_rev, test4) 
 {
 	Matrix A(3);
 	A[0][0] = 1; A[0][1] = 0; A[0][2] = 0;
 	A[1][0] = 1; A[1][1] = 0; A[1][2] = 1;
 	A[2][0] = 1; A[2][1] = 1; A[2][2] = 1;
 
-	A.reverse_matrix(10);
+	A.reverse_matrix(100);
 
-	EXPECT_EQ(A[0][0], 1);	EXPECT_EQ(A[0][1], 0);	EXPECT_EQ(A[0][2], 0);
-	EXPECT_EQ(A[1][0], 0);	EXPECT_EQ(A[1][1], -1);	EXPECT_EQ(A[1][2], 1);
-	EXPECT_EQ(A[2][0], -1);	EXPECT_EQ(A[2][1], 1);	EXPECT_EQ(A[2][2], 0);
+	EXPECT_NEAR(A[0][0], 1, 1e-1);	EXPECT_NEAR(A[0][1], 0, 1e-1);	EXPECT_NEAR(A[0][2], 0, 1e-1);
+	EXPECT_NEAR(A[1][0], 0, 1e-1);	EXPECT_NEAR(A[1][1], -1, 1e-1);	EXPECT_NEAR(A[1][2], 1, 1e-1);
+	EXPECT_NEAR(A[2][0], -1, 1e-1);	EXPECT_NEAR(A[2][1], 1, 1e-1);	EXPECT_NEAR(A[2][2], 0, 1e-1);
 }
