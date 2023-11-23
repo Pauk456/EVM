@@ -10,11 +10,12 @@ void Matrix::reverse_matrix(int M)
 {
 	Matrix B = calculate_B();
 	Matrix R = calculate_R(B);
+	Matrix Rst = R;
 	(*this).to_single();
 	for (int i = 0; i < M; i++)
 	{
-		(*this) += R;
-		R = R * R;
+		(*this) += Rst;
+		Rst = Rst * R;
 	}
 	(*this) = (*this) * B;
 }
@@ -124,7 +125,7 @@ Matrix Matrix::calculate_B()
 
 float Matrix::sum_max_row() // A8
 {
-	float max_sum = 0;
+	float max_sum = -9999999.0;
 	for (int i = 0; i < N; i++) // i - строка, j - столобец
 	{
 		float Ai = 0; // сумма i ой строчки
@@ -142,7 +143,7 @@ float Matrix::sum_max_row() // A8
 
 float Matrix::sum_max_column() // A1
 {
-	float max_sum = 0;
+	float max_sum = -9999999.0;
 	for (int j = 0; j < N; j++) // i - строка, j - столобец
 	{
 		float Aj = 0; // сумма j ого столбца

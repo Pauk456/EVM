@@ -18,6 +18,11 @@ public:
 	Matrix transpose_matrix() const;
 	void to_single();
 
+	// TEST
+	float sum_max_row_TEST() { return sum_max_row(); }
+	float sum_max_column_TEST() { return sum_max_column(); }
+	//
+
 	std::vector<float>& operator[](int row) 
 	{
 		return matrix[row];
