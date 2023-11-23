@@ -6,7 +6,8 @@ project(Lab7)
 
 set(exe_name Lab7)
 
-set(test_name test)
+set(test_prim test_prim)
+set(test_vectoriz test_vectoriz)
 
 add_library(Matrix
     src/Mul_Matrix_prim.cpp
@@ -30,6 +31,10 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(${test_name} test/test.cpp)
-target_link_libraries(${test_name} gtest_main)
-target_link_libraries(${test_name} Matrix)
+add_executable(${test_prim} test/test.cpp )
+target_link_libraries(${test_prim} gtest_main)
+target_link_libraries(${test_prim} Matrix)
+
+add_executable(${test_vectoriz} test/test2.cpp)
+target_link_libraries(${test_vectoriz} gtest_main)
+target_link_libraries(${test_vectoriz} Matrix)

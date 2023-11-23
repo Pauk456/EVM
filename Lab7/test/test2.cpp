@@ -146,7 +146,7 @@ TEST(Matrix_max_col, RandomValuesTest)
 
 // Matrix multiplication
 
-TEST(Matrix_mul, test1) 
+TEST(Matrix_mul, test1)
 {
 	Matrix A(3);
 	A[0][0] = 1; A[0][1] = 0; A[0][2] = 0;
@@ -176,7 +176,7 @@ TEST(Matrix_mul, test1)
 TEST(Matrix_mul, test2)
 {
 	Matrix A(3);
-	A[0][0] = 1; A[0][1] = 0; A[0][2] = 0;	
+	A[0][0] = 1; A[0][1] = 0; A[0][2] = 0;
 	A[1][0] = 1; A[1][1] = 0; A[1][2] = 1;
 	A[2][0] = 1; A[2][1] = 1; A[2][2] = 1;
 
@@ -424,7 +424,7 @@ TEST(Matrix_trsp, test2)
 
 // Matrix reverse
 
-TEST(Matrix_rev, test1) 
+TEST(Matrix_rev, test1)
 {
 	Matrix A(3);
 	A[0][2] = 1;
@@ -432,7 +432,7 @@ TEST(Matrix_rev, test1)
 	A[2][1] = 1;
 
 	A.reverse_matrix(10);
-	
+
 	EXPECT_EQ(A[0][0], 0);
 	EXPECT_EQ(A[0][1], 1);
 	EXPECT_EQ(A[0][2], 0);
@@ -476,7 +476,7 @@ TEST(Matrix_rev, test3)
 	EXPECT_NEAR(A[1][0], -0.2, 0.5);	EXPECT_NEAR(A[1][1], 0.4, 0.5);
 }
 
-TEST(Matrix_rev, test4) 
+TEST(Matrix_rev, test4)
 {
 	Matrix A(3);
 	A[0][0] = 1; A[0][1] = 0; A[0][2] = 0;
