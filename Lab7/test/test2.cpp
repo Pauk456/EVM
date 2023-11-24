@@ -469,7 +469,7 @@ TEST(Matrix_rev, test3)
 	A[1][0] = 2; A[1][1] = 6;
 
 	// Find the inverse of A
-	A.reverse_matrix(100);
+	A.reverse_matrix(200);
 
 	// Check if the product is approximately the identity matrix
 	EXPECT_NEAR(A[0][0], 0.6, 0.5);	EXPECT_NEAR(A[0][1], -0.7, 0.5);
@@ -478,7 +478,7 @@ TEST(Matrix_rev, test3)
 
 TEST(Matrix_rev, test4)
 {
-	Matrix A(4);
+	Matrix A(3);
 	A[0][0] = 1; A[0][1] = 0; A[0][2] = 0;
 	A[1][0] = 1; A[1][1] = 0; A[1][2] = 1;
 	A[2][0] = 1; A[2][1] = 1; A[2][2] = 1;

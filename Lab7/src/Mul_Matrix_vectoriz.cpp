@@ -25,7 +25,7 @@ Matrix::~Matrix()
 Matrix::Matrix(const Matrix& other) 
 {
 	N = other.N;
-	matrix = new float(N * N);
+	matrix = new float[N * N];
 	for (int i = 0; i < N * N; ++i) 
 	{
 		matrix[i] = other.matrix[i];
@@ -77,39 +77,56 @@ Matrix Matrix::operator+(const Matrix& b) const // Можно векторизовать
 	__m128* mA = (__m128*)(*this)[0];
 	__m128* mB = (__m128*)b[0];
 
-	for (int i = 0; i < N; i++)
+	for (int i = 0; i < (N * N) / 4; i++)
 	{
-		//__m128* xx;
-		for (int j = 0; j < N; j++)
-		{
-			mRes[i] = _mm_add_ps(mA[i], mB[i]);
-		}
+		mRes[i] = _mm_add_ps(mA[i], mB[i]);
 	}
-	// Учитывать что N должно делитсья на 4
+	for (int i = ((N * N) / 4) * 4; i < (N * N); i++)
+	{
+		int row = i / N;
+		int col = i % N;
+		Sum[row][col] = (*this)[row][col] + b[row][col];
+	}
 	return Sum;
 }
 
 Matrix& Matrix::operator+=(const Matrix& b) // Можно векторизовать
 {
-	
+	__m128* mRes = (__m128*)(*this)[0];
+	__m128* mA = (__m128*)(*this)[0];
+	__m128* mB = (__m128*)b[0];
 
-	for (int i = 0; i < N; i++)
+	for (int i = 0; i < (N * N) / 4; i++)
 	{
-
-
+		mRes[i] = _mm_add_ps(mA[i], mB[i]);
 	}
+	for (int i = ((N * N) / 4) * 4; i < (N * N); i++)
+	{
+		int row = i / N;
+		int col = i % N;
+		(*this)[row][col] = (*this)[row][col] + b[row][col];
+	}
+
 	return (*this);
 }
 
 Matrix Matrix::operator-(const Matrix& b) const// Можно векторизовать
 {
 	Matrix Sub(N);
-	for (int i = 0; i < N; i++)
+
+	__m128* mRes = (__m128*)Sub[0];
+	__m128* mA = (__m128*)(*this)[0];
+	__m128* mB = (__m128*)b[0];
+
+	for (int i = 0; i < (N * N) / 4; i++)
+	{	
+		mRes[i] = _mm_sub_ps(mA[i], mB[i]);
+	}
+	for (int i = ((N * N) / 4) * 4; i < (N * N); i++)
 	{
-		for (int j = 0; j < N; j++)
-		{
-			Sub[i][j] = (*this)[i][j] - b[i][j];
-		}
+		int row = i / N;
+		int col = i % N;
+		Sub[row][col] = (*this)[row][col] - b[row][col];
 	}
 	return Sub;
 }
