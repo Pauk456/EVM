@@ -1,9 +1,35 @@
-#include "Mul_matrix_prim.h"
+#include "Mul_matrix_vectoriz.h"
 
 Matrix::Matrix(int N)
 {
 	this->N = N;
-	matrix.resize(N, std::vector<float>(N, 0));
+	matrix = new float[N * N];
+	if (!matrix) 
+	{
+		exit(0);
+	}
+	for (int i = 0; i < N; i++) 
+	{
+		for (int j = 0; j < N; j++) 
+		{
+			(*this)[i][j] = 0;
+		}
+	}
+}
+
+Matrix::~Matrix()
+{
+	delete[] matrix;
+}
+
+Matrix::Matrix(const Matrix& other) 
+{
+	N = other.N;
+	matrix = new float(N * N);
+	for (int i = 0; i < N * N; ++i) 
+	{
+		matrix[i] = other.matrix[i];
+	}
 }
 
 void Matrix::reverse_matrix(int M)
@@ -43,32 +69,39 @@ void Matrix::to_single()
 	}
 }
 
-Matrix Matrix::operator+(const Matrix& b) const
+Matrix Matrix::operator+(const Matrix& b) const // Можно векторизовать
 {
 	Matrix Sum(N);
+
+	__m128* mRes = (__m128*)Sum[0];
+	__m128* mA = (__m128*)(*this)[0];
+	__m128* mB = (__m128*)b[0];
+
 	for (int i = 0; i < N; i++)
 	{
+		//__m128* xx;
 		for (int j = 0; j < N; j++)
 		{
-			Sum[i][j] = (*this)[i][j] + b[i][j];
+			mRes[i] = _mm_add_ps(mA[i], mB[i]);
 		}
 	}
+	// Учитывать что N должно делитсья на 4
 	return Sum;
 }
 
-Matrix& Matrix::operator+=(const Matrix& b)
+Matrix& Matrix::operator+=(const Matrix& b) // Можно векторизовать
 {
+	
+
 	for (int i = 0; i < N; i++)
 	{
-		for (int j = 0; j < N; j++)
-		{
-			(*this)[i][j] = (*this)[i][j] + b[i][j];
-		}
+
+
 	}
 	return (*this);
 }
 
-Matrix Matrix::operator-(const Matrix& b) const
+Matrix Matrix::operator-(const Matrix& b) const// Можно векторизовать
 {
 	Matrix Sub(N);
 	for (int i = 0; i < N; i++)
@@ -81,7 +114,7 @@ Matrix Matrix::operator-(const Matrix& b) const
 	return Sub;
 }
 
-Matrix Matrix::operator*(const Matrix& b) const
+Matrix Matrix::operator*(const Matrix& b) const // Можно векторизовать
 {
 	Matrix Mul(N); // i - строка, j - столбец
 	for (int j1 = 0; j1 < N; j1++)
@@ -97,16 +130,33 @@ Matrix Matrix::operator*(const Matrix& b) const
 	return Mul;
 }
 
-Matrix& Matrix::operator/(const float b)
+Matrix& Matrix::operator/(const float b) // Можно векторизовать
 {
 	for (int i = 0; i < N; i++)
 	{
 		for (int j = 0; j < N; j++)
 		{
-			matrix[i][j] /= b;
+			(*this)[i][j] /= b;
 		}
 	}
 	return (*this);
+}
+
+Matrix& Matrix::operator=(const Matrix& other) {
+	if (this == &other) {
+		return *this;
+	}
+
+	delete[] matrix;
+
+	N = other.N;
+	matrix = new float[N * N];
+
+	for (int i = 0; i < N * N; ++i) {
+		matrix[i] = other.matrix[i];
+	}
+
+	return *this;
 }
 
 Matrix Matrix::calculate_R(Matrix& B)
@@ -123,7 +173,7 @@ Matrix Matrix::calculate_B()
 	return (*this).transpose_matrix() / (A1 * A8);
 }
 
-float Matrix::sum_max_row() // A8
+float Matrix::sum_max_row() // A8 // Можно векторизовать
 {
 	float max_sum = -9999999.0;
 	for (int i = 0; i < N; i++) // i - строка, j - столобец
@@ -131,7 +181,7 @@ float Matrix::sum_max_row() // A8
 		float Ai = 0; // сумма i ой строчки
 		for (int j = 0; j < N; j++)
 		{
-			Ai += matrix[i][j];
+			Ai += (*this)[i][j];
 		}
 		if (Ai > max_sum)
 		{
@@ -141,7 +191,7 @@ float Matrix::sum_max_row() // A8
 	return max_sum;
 }
 
-float Matrix::sum_max_column() // A1
+float Matrix::sum_max_column() // A1 // Можно векторизовать
 {
 	float max_sum = -9999999.0;
 	for (int j = 0; j < N; j++) // i - строка, j - столобец
@@ -149,7 +199,7 @@ float Matrix::sum_max_column() // A1
 		float Aj = 0; // сумма j ого столбца
 		for (int i = 0; i < N; i++)
 		{
-			Aj += matrix[i][j];
+			Aj += (*this)[i][j];
 		}
 		if (Aj > max_sum)
 		{

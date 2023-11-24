@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "Mul_Matrix_prim.h"
+#include "Mul_matrix_vectoriz.h"
 
 using namespace std;
 
@@ -478,7 +478,7 @@ TEST(Matrix_rev, test3)
 
 TEST(Matrix_rev, test4)
 {
-	Matrix A(3);
+	Matrix A(4);
 	A[0][0] = 1; A[0][1] = 0; A[0][2] = 0;
 	A[1][0] = 1; A[1][1] = 0; A[1][2] = 1;
 	A[2][0] = 1; A[2][1] = 1; A[2][2] = 1;

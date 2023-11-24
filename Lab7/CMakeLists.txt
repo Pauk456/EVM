@@ -9,17 +9,30 @@ set(exe_name Lab7)
 set(test_prim test_prim)
 set(test_vectoriz test_vectoriz)
 
-add_library(Matrix
+set(Matrix_prim Matrix_prim)
+set(Matrix_vectoriz Matrix_vectoriz)
+
+add_library(${Matrix_prim}
     src/Mul_Matrix_prim.cpp
 )
 
-target_include_directories(Matrix
+add_library(${Matrix_vectoriz}
+    src/Mul_Matrix_vectoriz.cpp
+)
+
+target_include_directories(Matrix_prim
+    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+target_include_directories(Matrix_vectoriz
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
 add_executable(${exe_name} src/main.cpp)
 
-target_link_libraries(${PROJECT_NAME} Matrix)
+target_link_libraries(${PROJECT_NAME} ${Matrix_prim})
+
+target_link_libraries(${PROJECT_NAME} ${Matrix_vectoriz})
 
 # ========== GoogleTest ==========
 
@@ -31,10 +44,10 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(${test_prim} test/test.cpp )
+add_executable(${test_prim} test/test1.cpp )
 target_link_libraries(${test_prim} gtest_main)
-target_link_libraries(${test_prim} Matrix)
+target_link_libraries(${test_prim} ${Matrix_prim})
 
 add_executable(${test_vectoriz} test/test2.cpp)
 target_link_libraries(${test_vectoriz} gtest_main)
-target_link_libraries(${test_vectoriz} Matrix)
+target_link_libraries(${test_vectoriz} ${Matrix_vectoriz})

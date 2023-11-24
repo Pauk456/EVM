@@ -1,12 +1,13 @@
 #pragma once
 #include <vector>
 #include <iostream>
+#include <xmmintrin.h>
 
 class Matrix
 {
 private:
 	int N;
-	std::vector< std::vector<float> > matrix;
+	float* matrix;
 private:
 	Matrix calculate_R(Matrix& B);
 	Matrix calculate_B();
@@ -14,6 +15,8 @@ private:
 	float sum_max_column();
 public:
 	Matrix(int N);
+	~Matrix();
+	Matrix(const Matrix& other);
 	void reverse_matrix(int M);
 	Matrix transpose_matrix() const;
 	void to_single();
@@ -23,19 +26,21 @@ public:
 	float sum_max_column_TEST() { return sum_max_column(); }
 	//
 
-	std::vector<float>& operator[](int row)
+	
+	float* operator[](int row)
 	{
-		return matrix[row];
+		return &matrix[row * N];
 	}
-	const std::vector<float>& operator[](int row) const
+	const float* operator[](int row) const
 	{
-		return matrix[row];
+		return &matrix[row * N];
 	}
 	Matrix operator+(const Matrix& b) const;
 	Matrix& operator+=(const Matrix& b);
 	Matrix operator-(const Matrix& b) const;
 	Matrix operator*(const Matrix& b) const;
 	Matrix& operator/(const float b);
+	Matrix& operator=(const Matrix& other);
 
 	friend std::ostream& operator<<(std::ostream& os, const Matrix& obj);
 };
