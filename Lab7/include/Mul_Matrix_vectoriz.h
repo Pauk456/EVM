@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 #include <xmmintrin.h>
+#include <pmmintrin.h>
 
 class Matrix
 {

@@ -73,6 +73,32 @@ TEST(Matrix_max_row, RandomValuesTest)
 	EXPECT_EQ(maxRowSum, expectedMaxRowSum);
 }
 
+TEST(Matrix_max_row, LargeTest)
+{
+	int N = 100;
+	Matrix D(N);
+	for (int i = 0; i < N; i++) 
+	{
+		for (int j = 0; j < N; j++)
+		{
+			D[i][j] = 2 * i + j;
+		}
+	}
+	
+
+	// Find the maximum row sum
+	float maxRowSum = D.sum_max_row_TEST();
+
+	float expectedMaxRowSum = 0;
+	for (int j = 0; j < N; j++)
+	{
+		expectedMaxRowSum += 2 * (N - 1) + j;
+	}
+
+	// Check if the result matches the expected value
+	EXPECT_EQ(maxRowSum, expectedMaxRowSum);
+}
+
 // Max in col
 
 TEST(Matrix_max_col, ExampleTest)
@@ -251,6 +277,74 @@ TEST(Matrix_mul, test4)
 	}
 }
 
+TEST(Matrix_mul, LargeTest)
+{
+	int N = 100;
+	Matrix A(N);
+	for (int i = 0; i < N; ++i)
+	{
+		for (int j = 0; j < N; ++j)
+		{
+			if (i == j)
+			{
+				A[i][j] = 1;
+			}
+			else
+			{
+				A[i][j] = i + j + 1;
+			}
+		}
+	}
+
+	Matrix I(N);
+	I.to_single();
+
+	Matrix C = A * I;
+
+	Matrix expected = A;
+
+	for (int i = 0; i < N; ++i) {
+		for (int j = 0; j < N; ++j) {
+			EXPECT_EQ(C[i][j], expected[i][j]);
+		}
+	}
+}
+
+// Matrix division on const
+
+TEST(Matrix_division_const, LargeTest)
+{
+	// Matrix U
+	int N = 100;
+	Matrix U(N);
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < N; j++)
+		{
+			U[i][j] = i + j + 3;
+		}
+	}
+
+	Matrix W = U / 5.5123;
+
+	// Expected result
+	Matrix expected(N);
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < N; j++)
+		{
+			expected[i][j] = (i + j + 3) / 5.5123;
+		}
+	}
+
+	// Check each element in the result matrix
+	for (int i = 0; i < 2; ++i) {
+		for (int j = 0; j < 2; ++j) {
+			EXPECT_EQ(W[i][j], expected[i][j]);
+		}
+	}
+}
+
 // Matrix addition
 
 TEST(Matrix_sum, test1)
@@ -302,6 +396,50 @@ TEST(Matrix_sum, test2)
 	Matrix expected(2);
 	expected[0][0] = 6; expected[0][1] = 8;
 	expected[1][0] = 10; expected[1][1] = 12;
+
+	// Check each element in the result matrix
+	for (int i = 0; i < 2; ++i) {
+		for (int j = 0; j < 2; ++j) {
+			EXPECT_EQ(W[i][j], expected[i][j]);
+		}
+	}
+}
+
+TEST(Matrix_sum, LargeTest)
+{
+	// Matrix U
+	int N = 100;
+	Matrix U(N);
+	for (int i = 0; i < N; i++) 
+	{
+		for (int j = 0; j < N; j++) 
+		{
+			U[i][j] = i + j + 3;
+		}
+	}
+
+	// Matrix V
+	Matrix V(N);
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < N; j++)
+		{
+			V[i][j] = i - j + 4;
+		}
+	}
+
+	// Matrix W = U + V
+	Matrix W = U + V;
+
+	// Expected result
+	Matrix expected(N);
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < N; j++)
+		{
+			expected[i][j] = 2 * i + 7;
+		}
+	}
 
 	// Check each element in the result matrix
 	for (int i = 0; i < 2; ++i) {
@@ -368,6 +506,50 @@ TEST(Matrix_sub, test2)
 	for (int i = 0; i < 2; ++i) {
 		for (int j = 0; j < 2; ++j) {
 			EXPECT_EQ(Z[i][j], expected[i][j]);
+		}
+	}
+}
+
+TEST(Matrix_sub, LargeTest)
+{
+	// Matrix U
+	int N = 100;
+	Matrix U(N);
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < N; j++)
+		{
+			U[i][j] = i + j + 3;
+		}
+	}
+
+	// Matrix V
+	Matrix V(N);
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < N; j++)
+		{
+			V[i][j] = i - j + 4;
+		}
+	}
+
+	// Matrix W = U + V
+	Matrix W = U - V;
+
+	// Expected result
+	Matrix expected(N);
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < N; j++)
+		{
+			expected[i][j] = 2 * j - 1;
+		}
+	}
+
+	// Check each element in the result matrix
+	for (int i = 0; i < 2; ++i) {
+		for (int j = 0; j < 2; ++j) {
+			EXPECT_EQ(W[i][j], expected[i][j]);
 		}
 	}
 }
@@ -486,6 +668,44 @@ TEST(Matrix_rev, test4)
 	A.reverse_matrix(100);
 
 	EXPECT_NEAR(A[0][0], 1, 0.5);	EXPECT_NEAR(A[0][1], 0, 0.5);	EXPECT_NEAR(A[0][2], 0, 0.5);
-	EXPECT_NEAR(A[1][0], 0, 0.5);	EXPECT_NEAR(A[1][1], -1, 0.5);	EXPECT_NEAR(A[1][2], 1, 0.51);
+	EXPECT_NEAR(A[1][0], 0, 0.5);	EXPECT_NEAR(A[1][1], -1, 0.5);	EXPECT_NEAR(A[1][2], 1, 0.5);
 	EXPECT_NEAR(A[2][0], -1, 0.5);	EXPECT_NEAR(A[2][1], 1, 0.5);	EXPECT_NEAR(A[2][2], 0, 0.5);
+}
+
+TEST(Matrix_rev, vectorizTest)
+{
+	int N = 16;
+	Matrix A(N);
+	for (int i = 0; i < N; ++i) 
+	{
+		for (int j = 0; j < N; ++j) 
+		{
+			if(i == j) 
+			{
+				A[i][j] = 1;
+			}
+			else
+			{
+				A[i][j] = i + j + 1;
+			}
+		}
+	}
+
+	Matrix AReverse = A;
+	AReverse.reverse_matrix(10000);
+	
+	Matrix I = A * AReverse;
+
+	for (int i = 0; i < N; ++i) {
+		for (int j = 0; j < N; ++j) {
+			if (i == j) {
+				float tset = I[i][j];
+				EXPECT_NEAR(I[i][j], 1.0, 1);
+			}
+			else {
+				float tset = I[i][j];
+				EXPECT_NEAR(I[i][j], 0.0, 1);
+			}
+		}
+	}
 }

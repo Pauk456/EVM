@@ -69,7 +69,7 @@ void Matrix::to_single()
 	}
 }
 
-Matrix Matrix::operator+(const Matrix& b) const // Можно векторизовать
+Matrix Matrix::operator+(const Matrix& b) const
 {
 	Matrix Sum(N);
 
@@ -147,14 +147,19 @@ Matrix Matrix::operator*(const Matrix& b) const // Можно векторизовать
 	return Mul;
 }
 
-Matrix& Matrix::operator/(const float b) // Можно векторизовать
+Matrix& Matrix::operator/(const float b) 
 {
-	for (int i = 0; i < N; i++)
+	__m128 *mRes = (__m128*)(*this)[0];
+	__m128 mdivisor = _mm_set1_ps(b);
+	for (int i = 0; i < (N * N) / 4; i++)
 	{
-		for (int j = 0; j < N; j++)
-		{
-			(*this)[i][j] /= b;
-		}
+		mRes[i] = _mm_div_ps(mRes[i], mdivisor);
+	}
+	for (int i = ((N * N) / 4) * 4; i < (N * N); i++)
+	{
+		int row = i / N;
+		int col = i % N;
+		(*this)[row][col] /=  b;
 	}
 	return (*this);
 }
@@ -190,19 +195,30 @@ Matrix Matrix::calculate_B()
 	return (*this).transpose_matrix() / (A1 * A8);
 }
 
-float Matrix::sum_max_row() // A8 // Можно векторизовать
+float Matrix::sum_max_row() // A8 // ФУНКЦИЯ РАБОТАЕТ ТОЛЬКО ДЛЯ ВЫРАВНЕННЫХ ДАННЫХ
 {
 	float max_sum = -9999999.0;
 	for (int i = 0; i < N; i++) // i - строка, j - столобец
 	{
-		float Ai = 0; // сумма i ой строчки
-		for (int j = 0; j < N; j++)
+		__m128 Ai = _mm_set1_ps(0);
+		__m128* mV = (__m128*)(*this)[i];
+		for (int j = 0; j < (N / 4); j++)
 		{
-			Ai += (*this)[i][j];
+			Ai = _mm_add_ps(Ai, mV[j]);
 		}
-		if (Ai > max_sum)
+
+		__m128 TAi = _mm_hadd_ps(Ai, Ai); // 1 + 2, 3 + 4, 1 + 2, 3 + 4,
+		TAi = _mm_hadd_ps(TAi, TAi);
+		float Ai_sum = 0;
+		_mm_store_ss(&Ai_sum, TAi);
+
+		for (int j = (N / 4) * 4; j < N; j++) {
+			Ai_sum += (*this)[i][j];
+		}
+
+		if (Ai_sum > max_sum)
 		{
-			max_sum = Ai;
+			max_sum = Ai_sum;
 		}
 	}
 	return max_sum;
@@ -213,7 +229,7 @@ float Matrix::sum_max_column() // A1 // Можно векторизовать
 	float max_sum = -9999999.0;
 	for (int j = 0; j < N; j++) // i - строка, j - столобец
 	{
-		float Aj = 0; // сумма j ого столбца
+		float Aj = 0;
 		for (int i = 0; i < N; i++)
 		{
 			Aj += (*this)[i][j];
