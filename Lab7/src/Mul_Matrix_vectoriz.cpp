@@ -131,17 +131,24 @@ Matrix Matrix::operator-(const Matrix& b) const// Можно векторизовать
 	return Sub;
 }
 
-Matrix Matrix::operator*(const Matrix& b) const // Можно векторизовать
+Matrix Matrix::operator*(const Matrix& b) const // Можно векторизовать // переделать как в лекции петрова
 {
 	Matrix Mul(N); // i - строка, j - столбец
+	Matrix BTrans = b.transpose_matrix();
 	for (int row1 = 0; row1 < N; row1++)
 	{
 		for (int col2 = 0; col2 < N; col2++)
 		{
-			for (int col1 = 0; col1 < N; col1++)
+			__m128 mSum = _mm_set1_ps(0);
+			__m128* a = (__m128*)(*this)[row1];
+			__m128* b = (__m128*)BTrans[col2];
+			for (int col1 = 0; col1 < (N / 4); col1++)
 			{
-				Mul[row1][col2] += (*this)[row1][col1] * b[col1][col2];
+				mSum = _mm_add_ps(mSum, _mm_mul_ps(a[col1], b[col1]));
 			}
+			__m128 TSum = _mm_hadd_ps(mSum, mSum);
+			TSum = _mm_hadd_ps(TSum, TSum);
+			_mm_store_ss(&Mul[row1][col2], TSum);
 		}
 	}
 	return Mul;

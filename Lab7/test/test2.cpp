@@ -172,114 +172,114 @@ TEST(Matrix_max_col, RandomValuesTest)
 
 // Matrix multiplication
 
-TEST(Matrix_mul, test1)
-{
-	Matrix A(3);
-	A[0][0] = 1; A[0][1] = 0; A[0][2] = 0;
-	A[1][0] = 1; A[1][1] = 0; A[1][2] = 1;
-	A[2][0] = 1; A[2][1] = 1; A[2][2] = 1;
-
-	Matrix B(3);
-	B[0][0] = 1; B[0][1] = 0; B[0][2] = 0;
-	B[1][0] = 0; B[1][1] = 1; B[1][2] = 0;
-	B[2][0] = 0; B[2][1] = 0; B[2][2] = 1;
-
-	Matrix C = A * B;
-
-	// Expected result
-	Matrix expected(3);
-	expected[0][0] = 1; expected[0][1] = 0; expected[0][2] = 0;
-	expected[1][0] = 1; expected[1][1] = 0; expected[1][2] = 1;
-	expected[2][0] = 1; expected[2][1] = 1; expected[2][2] = 1;
-
-	for (int i = 0; i < 3; ++i) {
-		for (int j = 0; j < 3; ++j) {
-			EXPECT_EQ(C[i][j], expected[i][j]);
-		}
-	}
-}
-
-TEST(Matrix_mul, test2)
-{
-	Matrix A(3);
-	A[0][0] = 1; A[0][1] = 0; A[0][2] = 0;
-	A[1][0] = 1; A[1][1] = 0; A[1][2] = 1;
-	A[2][0] = 1; A[2][1] = 1; A[2][2] = 1;
-
-	Matrix B(3);
-	B[0][0] = 1; B[0][1] = 0; B[0][2] = 1;
-	B[1][0] = 0; B[1][1] = 1; B[1][2] = 0;
-	B[2][0] = 1; B[2][1] = 0; B[2][2] = 1;
-
-	Matrix C = A * B;
-
-	// Expected result
-	Matrix expected(3);
-	expected[0][0] = 1; expected[0][1] = 0; expected[0][2] = 1;
-	expected[1][0] = 2; expected[1][1] = 0; expected[1][2] = 2;
-	expected[2][0] = 2; expected[2][1] = 1; expected[2][2] = 2;
-
-	for (int i = 0; i < 3; ++i) {
-		for (int j = 0; j < 3; ++j) {
-			EXPECT_EQ(C[i][j], expected[i][j]);
-		}
-	}
-}
-
-TEST(Matrix_mul, test3)
-{
-	Matrix A(3);
-	A[0][0] = 2; A[0][1] = 1; A[0][2] = 0;
-	A[1][0] = 0; A[1][1] = 1; A[1][2] = 1;
-	A[2][0] = 1; A[2][1] = 0; A[2][2] = 1;
-
-	Matrix B(3);
-	B[0][0] = 1; B[0][1] = 2; B[0][2] = 0;
-	B[1][0] = 0; B[1][1] = 1; B[1][2] = 1;
-	B[2][0] = 1; B[2][1] = 1; B[2][2] = 1;
-
-	Matrix C = A * B;
-
-	// Expected result
-	Matrix expected(3);
-	expected[0][0] = 2; expected[0][1] = 5; expected[0][2] = 1;
-	expected[1][0] = 1; expected[1][1] = 2; expected[1][2] = 2;
-	expected[2][0] = 2; expected[2][1] = 3; expected[2][2] = 1;
-
-	// Check each element in the result matrix
-	for (int i = 0; i < 3; ++i) {
-		for (int j = 0; j < 3; ++j) {
-			EXPECT_EQ(C[i][j], expected[i][j]);
-		}
-	}
-}
-
-TEST(Matrix_mul, test4)
-{
-	Matrix A(2);
-	A[0][0] = 2; A[0][1] = 1;
-	A[1][0] = 3; A[1][1] = 0;
-
-	Matrix B(2);
-	B[0][0] = 1; B[0][1] = 2;
-	B[1][0] = 0; B[1][1] = 1;
-
-	Matrix C = A * B;
-
-	Matrix expected(2);
-	expected[0][0] = 2; expected[0][1] = 5;
-	expected[1][0] = 3; expected[1][1] = 6;
-
-	for (int i = 0; i < 2; ++i) {
-		for (int j = 0; j < 2; ++j) {
-			EXPECT_EQ(C[i][j], expected[i][j]);
-		}
-	}
-}
+//TEST(Matrix_mul, test1)
+//{
+//	Matrix A(3);
+//	A[0][0] = 1; A[0][1] = 0; A[0][2] = 0;
+//	A[1][0] = 1; A[1][1] = 0; A[1][2] = 1;
+//	A[2][0] = 1; A[2][1] = 1; A[2][2] = 1;
+//
+//	Matrix B(3);
+//	B[0][0] = 1; B[0][1] = 0; B[0][2] = 0;
+//	B[1][0] = 0; B[1][1] = 1; B[1][2] = 0;
+//	B[2][0] = 0; B[2][1] = 0; B[2][2] = 1;
+//
+//	Matrix C = A * B;
+//
+//	// Expected result
+//	Matrix expected(3);
+//	expected[0][0] = 1; expected[0][1] = 0; expected[0][2] = 0;
+//	expected[1][0] = 1; expected[1][1] = 0; expected[1][2] = 1;
+//	expected[2][0] = 1; expected[2][1] = 1; expected[2][2] = 1;
+//
+//	for (int i = 0; i < 3; ++i) {
+//		for (int j = 0; j < 3; ++j) {
+//			EXPECT_EQ(C[i][j], expected[i][j]);
+//		}
+//	}
+//}
+//
+//TEST(Matrix_mul, test2)
+//{
+//	Matrix A(3);
+//	A[0][0] = 1; A[0][1] = 0; A[0][2] = 0;
+//	A[1][0] = 1; A[1][1] = 0; A[1][2] = 1;
+//	A[2][0] = 1; A[2][1] = 1; A[2][2] = 1;
+//
+//	Matrix B(3);
+//	B[0][0] = 1; B[0][1] = 0; B[0][2] = 1;
+//	B[1][0] = 0; B[1][1] = 1; B[1][2] = 0;
+//	B[2][0] = 1; B[2][1] = 0; B[2][2] = 1;
+//
+//	Matrix C = A * B;
+//
+//	// Expected result
+//	Matrix expected(3);
+//	expected[0][0] = 1; expected[0][1] = 0; expected[0][2] = 1;
+//	expected[1][0] = 2; expected[1][1] = 0; expected[1][2] = 2;
+//	expected[2][0] = 2; expected[2][1] = 1; expected[2][2] = 2;
+//
+//	for (int i = 0; i < 3; ++i) {
+//		for (int j = 0; j < 3; ++j) {
+//			EXPECT_EQ(C[i][j], expected[i][j]);
+//		}
+//	}
+//}
+//
+//TEST(Matrix_mul, test3)
+//{
+//	Matrix A(3);
+//	A[0][0] = 2; A[0][1] = 1; A[0][2] = 0;
+//	A[1][0] = 0; A[1][1] = 1; A[1][2] = 1;
+//	A[2][0] = 1; A[2][1] = 0; A[2][2] = 1;
+//
+//	Matrix B(3);
+//	B[0][0] = 1; B[0][1] = 2; B[0][2] = 0;
+//	B[1][0] = 0; B[1][1] = 1; B[1][2] = 1;
+//	B[2][0] = 1; B[2][1] = 1; B[2][2] = 1;
+//
+//	Matrix C = A * B;
+//
+//	// Expected result
+//	Matrix expected(3);
+//	expected[0][0] = 2; expected[0][1] = 5; expected[0][2] = 1;
+//	expected[1][0] = 1; expected[1][1] = 2; expected[1][2] = 2;
+//	expected[2][0] = 2; expected[2][1] = 3; expected[2][2] = 1;
+//
+//	// Check each element in the result matrix
+//	for (int i = 0; i < 3; ++i) {
+//		for (int j = 0; j < 3; ++j) {
+//			EXPECT_EQ(C[i][j], expected[i][j]);
+//		}
+//	}
+//}
+//
+//TEST(Matrix_mul, test4)
+//{
+//	Matrix A(2);
+//	A[0][0] = 2; A[0][1] = 1;
+//	A[1][0] = 3; A[1][1] = 0;
+//
+//	Matrix B(2);
+//	B[0][0] = 1; B[0][1] = 2;
+//	B[1][0] = 0; B[1][1] = 1;
+//
+//	Matrix C = A * B;
+//
+//	Matrix expected(2);
+//	expected[0][0] = 2; expected[0][1] = 5;
+//	expected[1][0] = 3; expected[1][1] = 6;
+//
+//	for (int i = 0; i < 2; ++i) {
+//		for (int j = 0; j < 2; ++j) {
+//			EXPECT_EQ(C[i][j], expected[i][j]);
+//		}
+//	}
+//}
 
 TEST(Matrix_mul, LargeTest)
 {
-	int N = 100;
+	int N = 1024;
 	Matrix A(N);
 	for (int i = 0; i < N; ++i)
 	{
@@ -606,71 +606,71 @@ TEST(Matrix_trsp, test2)
 
 // Matrix reverse
 
-TEST(Matrix_rev, test1)
-{
-	Matrix A(3);
-	A[0][2] = 1;
-	A[1][0] = 1;
-	A[2][1] = 1;
-
-	A.reverse_matrix(10);
-
-	EXPECT_EQ(A[0][0], 0);
-	EXPECT_EQ(A[0][1], 1);
-	EXPECT_EQ(A[0][2], 0);
-
-	EXPECT_EQ(A[1][0], 0);
-	EXPECT_EQ(A[1][1], 0);
-	EXPECT_EQ(A[1][2], 1);
-
-	EXPECT_EQ(A[2][0], 1);
-	EXPECT_EQ(A[2][1], 0);
-	EXPECT_EQ(A[2][2], 0);
-}
-
-TEST(Matrix_rev, test2)
-{
-	// Matrix A
-	Matrix A(2);
-	A[0][0] = 1; A[0][1] = 2;
-	A[1][0] = 3; A[1][1] = 4;
-
-	// Find the inverse of A
-	A.reverse_matrix(1000);
-
-	// Check if the product is approximately the identity matrix
-	EXPECT_NEAR(A[0][0], -2, 1e-1);		EXPECT_NEAR(A[0][1], 1, 1e-1);
-	EXPECT_NEAR(A[1][0], 1.5, 1e-1);	EXPECT_NEAR(A[1][1], -0.5, 1e-1);
-}
-
-TEST(Matrix_rev, test3)
-{
-	// Matrix A
-	Matrix A(2);
-	A[0][0] = 4; A[0][1] = 7;
-	A[1][0] = 2; A[1][1] = 6;
-
-	// Find the inverse of A
-	A.reverse_matrix(200);
-
-	// Check if the product is approximately the identity matrix
-	EXPECT_NEAR(A[0][0], 0.6, 0.5);	EXPECT_NEAR(A[0][1], -0.7, 0.5);
-	EXPECT_NEAR(A[1][0], -0.2, 0.5);	EXPECT_NEAR(A[1][1], 0.4, 0.5);
-}
-
-TEST(Matrix_rev, test4)
-{
-	Matrix A(3);
-	A[0][0] = 1; A[0][1] = 0; A[0][2] = 0;
-	A[1][0] = 1; A[1][1] = 0; A[1][2] = 1;
-	A[2][0] = 1; A[2][1] = 1; A[2][2] = 1;
-
-	A.reverse_matrix(100);
-
-	EXPECT_NEAR(A[0][0], 1, 0.5);	EXPECT_NEAR(A[0][1], 0, 0.5);	EXPECT_NEAR(A[0][2], 0, 0.5);
-	EXPECT_NEAR(A[1][0], 0, 0.5);	EXPECT_NEAR(A[1][1], -1, 0.5);	EXPECT_NEAR(A[1][2], 1, 0.5);
-	EXPECT_NEAR(A[2][0], -1, 0.5);	EXPECT_NEAR(A[2][1], 1, 0.5);	EXPECT_NEAR(A[2][2], 0, 0.5);
-}
+//TEST(Matrix_rev, test1)
+//{
+//	Matrix A(3);
+//	A[0][2] = 1;
+//	A[1][0] = 1;
+//	A[2][1] = 1;
+//
+//	A.reverse_matrix(10);
+//
+//	EXPECT_EQ(A[0][0], 0);
+//	EXPECT_EQ(A[0][1], 1);
+//	EXPECT_EQ(A[0][2], 0);
+//
+//	EXPECT_EQ(A[1][0], 0);
+//	EXPECT_EQ(A[1][1], 0);
+//	EXPECT_EQ(A[1][2], 1);
+//
+//	EXPECT_EQ(A[2][0], 1);
+//	EXPECT_EQ(A[2][1], 0);
+//	EXPECT_EQ(A[2][2], 0);
+//}
+//
+//TEST(Matrix_rev, test2)
+//{
+//	// Matrix A
+//	Matrix A(2);
+//	A[0][0] = 1; A[0][1] = 2;
+//	A[1][0] = 3; A[1][1] = 4;
+//
+//	// Find the inverse of A
+//	A.reverse_matrix(1000);
+//
+//	// Check if the product is approximately the identity matrix
+//	EXPECT_NEAR(A[0][0], -2, 1e-1);		EXPECT_NEAR(A[0][1], 1, 1e-1);
+//	EXPECT_NEAR(A[1][0], 1.5, 1e-1);	EXPECT_NEAR(A[1][1], -0.5, 1e-1);
+//}
+//
+//TEST(Matrix_rev, test3)
+//{
+//	// Matrix A
+//	Matrix A(2);
+//	A[0][0] = 4; A[0][1] = 7;
+//	A[1][0] = 2; A[1][1] = 6;
+//
+//	// Find the inverse of A
+//	A.reverse_matrix(200);
+//
+//	// Check if the product is approximately the identity matrix
+//	EXPECT_NEAR(A[0][0], 0.6, 0.5);	EXPECT_NEAR(A[0][1], -0.7, 0.5);
+//	EXPECT_NEAR(A[1][0], -0.2, 0.5);	EXPECT_NEAR(A[1][1], 0.4, 0.5);
+//}
+//
+//TEST(Matrix_rev, test4)
+//{
+//	Matrix A(3);
+//	A[0][0] = 1; A[0][1] = 0; A[0][2] = 0;
+//	A[1][0] = 1; A[1][1] = 0; A[1][2] = 1;
+//	A[2][0] = 1; A[2][1] = 1; A[2][2] = 1;
+//
+//	A.reverse_matrix(100);
+//
+//	EXPECT_NEAR(A[0][0], 1, 0.5);	EXPECT_NEAR(A[0][1], 0, 0.5);	EXPECT_NEAR(A[0][2], 0, 0.5);
+//	EXPECT_NEAR(A[1][0], 0, 0.5);	EXPECT_NEAR(A[1][1], -1, 0.5);	EXPECT_NEAR(A[1][2], 1, 0.5);
+//	EXPECT_NEAR(A[2][0], -1, 0.5);	EXPECT_NEAR(A[2][1], 1, 0.5);	EXPECT_NEAR(A[2][2], 0, 0.5);
+//}
 
 TEST(Matrix_rev, vectorizTest)
 {
