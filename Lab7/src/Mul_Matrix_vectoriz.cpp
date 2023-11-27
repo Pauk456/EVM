@@ -137,19 +137,34 @@ Matrix Matrix::operator-(const Matrix& b) const// Можно векторизовать
 Matrix Matrix::operator*(const Matrix& b) const // Можно векторизовать 
 {
 	Matrix Mul(N); // i - строка, j - столбе
-	for (int row1 = 0; row1 < N; row1++)
+	for (int row1 = 0; row1 < N; row1 += 4)
 	{
 		float* str0 = (float*)(*this)[row1];
+		float* str1 = (float*)(*this)[row1 + 1];
+		float* str2 = (float*)(*this)[row1 + 2];
+		float* str3 = (float*)(*this)[row1 + 3];
 		for (int col2 = 0; col2 < N; col2 += 4)
 		{
 			__m128 mSum0 = _mm_set1_ps(0);
+			__m128 mSum1 = _mm_set1_ps(0);
+			__m128 mSum2 = _mm_set1_ps(0);
+			__m128 mSum3 = _mm_set1_ps(0);
 			for (int col1 = 0; col1 < N; col1++)
 			{
-				__m128 mMul0 = _mm_set1_ps(str0[col1]);
 				__m128 mBstr0 = _mm_loadu_ps(&b[col1][col2]);
+				__m128 mMul0 = _mm_set1_ps(str0[col1]);
+				__m128 mMul1 = _mm_set1_ps(str1[col1]);
+				__m128 mMul2 = _mm_set1_ps(str2[col1]);
+				__m128 mMul3 = _mm_set1_ps(str3[col1]);
 				mSum0 = _mm_add_ps(mSum0, _mm_mul_ps(mMul0, mBstr0));
+				mSum1 = _mm_add_ps(mSum1, _mm_mul_ps(mMul1, mBstr0));
+				mSum2 = _mm_add_ps(mSum2, _mm_mul_ps(mMul2, mBstr0));
+				mSum3 = _mm_add_ps(mSum3, _mm_mul_ps(mMul3, mBstr0));
 			}
 			_mm_storeu_ps(&Mul[row1][col2], mSum0);
+			_mm_storeu_ps(&Mul[row1 + 1][col2], mSum1);
+			_mm_storeu_ps(&Mul[row1 + 2][col2], mSum2);
+			_mm_storeu_ps(&Mul[row1 + 3][col2], mSum3);
 		}
 	}
 	return Mul;
