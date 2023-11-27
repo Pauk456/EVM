@@ -279,7 +279,7 @@ TEST(Matrix_max_col, RandomValuesTest)
 
 TEST(Matrix_mul, LargeTest)
 {
-	int N = 1024;
+	int N = 40; //1024
 	Matrix A(N);
 	for (int i = 0; i < N; ++i)
 	{

@@ -131,24 +131,25 @@ Matrix Matrix::operator-(const Matrix& b) const// Можно векторизовать
 	return Sub;
 }
 
+//float* str0 = (float*)(*this)[row1];
+//float* str1 = (float*)(*this)[row1 + 1];
+
 Matrix Matrix::operator*(const Matrix& b) const // Можно векторизовать 
 {
 	Matrix Mul(N); // i - строка, j - столбе
-	Matrix BTrans = b.transpose_matrix();
 	for (int row1 = 0; row1 < N; row1++)
 	{
-		for (int col2 = 0; col2 < N; col2++)
+		float* str0 = (float*)(*this)[row1];
+		for (int col2 = 0; col2 < N; col2 += 4)
 		{
-			__m128 mSum = _mm_set1_ps(0);
-			__m128* a = (__m128*)(*this)[row1];
-			__m128* b = (__m128*)BTrans[col2];
-			for (int col1 = 0; col1 < (N / 4); col1++)
+			__m128 mSum0 = _mm_set1_ps(0);
+			for (int col1 = 0; col1 < N; col1++)
 			{
-				mSum = _mm_add_ps(mSum, _mm_mul_ps(a[col1], b[col1]));
+				__m128 mMul0 = _mm_set1_ps(str0[col1]);
+				__m128 mBstr0 = _mm_loadu_ps(&b[col1][col2]);
+				mSum0 = _mm_add_ps(mSum0, _mm_mul_ps(mMul0, mBstr0));
 			}
-			__m128 TSum = _mm_hadd_ps(mSum, mSum);
-			TSum = _mm_hadd_ps(TSum, TSum);
-			_mm_store_ss(&Mul[row1][col2], TSum);
+			_mm_storeu_ps(&Mul[row1][col2], mSum0);
 		}
 	}
 	return Mul;
