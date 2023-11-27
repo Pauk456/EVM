@@ -131,9 +131,9 @@ Matrix Matrix::operator-(const Matrix& b) const// Можно векторизовать
 	return Sub;
 }
 
-Matrix Matrix::operator*(const Matrix& b) const // Можно векторизовать // переделать как в лекции петрова
+Matrix Matrix::operator*(const Matrix& b) const // Можно векторизовать 
 {
-	Matrix Mul(N); // i - строка, j - столбец
+	Matrix Mul(N); // i - строка, j - столбе
 	Matrix BTrans = b.transpose_matrix();
 	for (int row1 = 0; row1 < N; row1++)
 	{
