@@ -27,7 +27,6 @@ public:
 	float sum_max_row_TEST() { return sum_max_row(); }
 	float sum_max_column_TEST() { return sum_max_column(); }
 	//
-
 	
 	float* operator[](int row)
 	{

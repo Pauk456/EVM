@@ -248,7 +248,7 @@ Matrix Matrix::calculate_B()
 
 float Matrix::sum_max_row() // A8 // ÔÓÍÊÖÈß ĞÀÁÎÒÀÅÒ ÒÎËÜÊÎ ÄËß ÂÛĞÀÂÍÅÍÍÛÕ ÄÀÍÍÛÕ
 {
-	float max_sum = std::numeric_limits<float>::min();
+	float max_sum = std::numeric_limits<float>::lowest();
 	for (int i = 0; i < N; i++) // i - ñòğîêà, j - ñòîëîáåö
 	{
 		__m128 Ai = _mm_set1_ps(0);
@@ -274,10 +274,10 @@ float Matrix::sum_max_row() // A8 // ÔÓÍÊÖÈß ĞÀÁÎÒÀÅÒ ÒÎËÜÊÎ ÄËß ÂÛĞÀÂÍÅÍÍÛÕ ÄÀÍ
 float Matrix::sum_max_column() // A1 // Ìîæíî âåêòîğèçîâàòü
 {
 	__m128 mMax_sum = _mm_set_ps(
-		std::numeric_limits<float>::min(), 
-		std::numeric_limits<float>::min(),
-		std::numeric_limits<float>::min(),
-		std::numeric_limits<float>::min());
+		std::numeric_limits<float>::lowest(),
+		std::numeric_limits<float>::lowest(),
+		std::numeric_limits<float>::lowest(),
+		std::numeric_limits<float>::lowest());
 	for (int j = 0; j < N; j += 16) // i - ñòğîêà, j - ñòîëîáåö
 	{
 		__m128 mSum0 = _mm_set1_ps(0);
@@ -301,7 +301,7 @@ float Matrix::sum_max_column() // A1 // Ìîæíî âåêòîğèçîâàòü
 		mMax_sum = _mm_max_ps(mMax_sum, result);
 	}
 
-	float max_sum_float = std::numeric_limits<float>::min();
+	float max_sum_float = std::numeric_limits<float>::lowest();
 	float Max_sum_float[4];
 	_mm_storeu_ps(Max_sum_float, mMax_sum);
 	for (int i = 0; i < 4; i++)

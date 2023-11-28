@@ -84,13 +84,13 @@ Matrix Matrix::operator-(const Matrix& b) const
 Matrix Matrix::operator*(const Matrix& b) const
 {
 	Matrix Mul(N); // i - строка, j - столбец
-	for (int j1 = 0; j1 < N; j1++) 
+	for (int row1 = 0; row1 < N; row1++)
 	{
-		for (int j2 = 0; j2 < N; j2++) 
+		for (int col2 = 0; col2 < N; col2++)
 		{
-			for (int i1 = 0; i1 < N; i1++) 
+			for (int col1 = 0; col1 < N; col1++)
 			{
-				Mul[i1][j2] += (*this)[i1][j1] * b[j1][j2];
+				Mul[row1][col2] += (*this)[row1][col1] * b[col1][col2];
 			}
 		}
 	}
@@ -125,7 +125,7 @@ Matrix Matrix::calculate_B()
 
 float Matrix::sum_max_row() // A8
 {
-	float max_sum = -9999999.0;
+	float max_sum = std::numeric_limits<float>::lowest();
 	for (int i = 0; i < N; i++) // i - строка, j - столобец
 	{
 		float Ai = 0; // сумма i ой строчки
@@ -143,7 +143,7 @@ float Matrix::sum_max_row() // A8
 
 float Matrix::sum_max_column() // A1
 {
-	float max_sum = -9999999.0;
+	float max_sum = std::numeric_limits<float>::lowest();
 	for (int j = 0; j < N; j++) // i - строка, j - столобец
 	{
 		float Aj = 0; // сумма j ого столбца
