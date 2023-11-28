@@ -3,6 +3,8 @@
 
 using namespace std;
 
+using namespace Matrix_prim;
+
 // Max in row
 TEST(Matrix_max_row, ExampleTest)
 {

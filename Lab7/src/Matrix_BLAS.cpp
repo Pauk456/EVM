@@ -1,173 +1,150 @@
 #include "Matrix_BLAS.h"
 
-Matrix::Matrix(int N)
+namespace Matrix_blas
 {
-	this->N = N;
-	matrix.resize(N, std::vector<float>(N, 0));
-}
-
-void Matrix::reverse_matrix(int M)
-{
-	Matrix B = calculate_B();
-	Matrix R = calculate_R(B);
-	Matrix Rst = R;
-	(*this).to_single();
-	for (int i = 0; i < M; i++)
+	Matrix::Matrix(int N)
 	{
-		(*this) += Rst;
-		Rst = Rst * R;
+		this->N = N;
+		matrix.resize(N, std::vector<float>(N, 0));
 	}
-	(*this) = (*this) * B;
-}
 
-Matrix Matrix::transpose_matrix() const {
-	Matrix T(N);
-	for (int i = 0; i < N; i++)
+	void Matrix::reverse_matrix(int M)
 	{
-		for (int j = 0; j < N; j++)
+		Matrix B = calculate_B();
+		Matrix R = calculate_R(B);
+		Matrix Rst = R;
+		(*this).to_single();
+		for (int i = 0; i < M; i++)
 		{
-			T[j][i] = (*this)[i][j];
+			(*this) += Rst;
+			Rst = Rst * R;
 		}
+		(*this) = (*this) * B;
 	}
-	return T;
-}
 
-void Matrix::to_single()
-{
-	for (int i = 0; i < N; i++)
-	{
-		for (int j = 0; j < N; j++)
+	Matrix Matrix::transpose_matrix() const {
+		Matrix T(N);
+		for (int i = 0; i < N; i++)
 		{
-			(*this)[i][j] = i == j ? 1 : 0;
-		}
-	}
-}
-
-Matrix Matrix::operator+(const Matrix& b) const
-{
-	Matrix Sum(N);
-	for (int i = 0; i < N; i++)
-	{
-		for (int j = 0; j < N; j++)
-		{
-			Sum[i][j] = (*this)[i][j] + b[i][j];
-		}
-	}
-	return Sum;
-}
-
-Matrix& Matrix::operator+=(const Matrix& b)
-{
-	for (int i = 0; i < N; i++)
-	{
-		for (int j = 0; j < N; j++)
-		{
-			(*this)[i][j] = (*this)[i][j] + b[i][j];
-		}
-	}
-	return (*this);
-}
-
-Matrix Matrix::operator-(const Matrix& b) const
-{
-	Matrix Sub(N);
-	for (int i = 0; i < N; i++)
-	{
-		for (int j = 0; j < N; j++)
-		{
-			Sub[i][j] = (*this)[i][j] - b[i][j];
-		}
-	}
-	return Sub;
-}
-
-Matrix Matrix::operator*(const Matrix& b) const
-{
-	Matrix Mul(N); // i - строка, j - столбец
-	for (int row1 = 0; row1 < N; row1++)
-	{
-		for (int col2 = 0; col2 < N; col2++)
-		{
-			for (int col1 = 0; col1 < N; col1++)
+			for (int j = 0; j < N; j++)
 			{
-				Mul[row1][col2] += (*this)[row1][col1] * b[col1][col2];
+				T[j][i] = (*this)[i][j];
+			}
+		}
+		return T;
+	}
+
+	void Matrix::to_single()
+	{
+		for (int i = 0; i < N; i++)
+		{
+			for (int j = 0; j < N; j++)
+			{
+				(*this)[i][j] = i == j ? 1 : 0;
 			}
 		}
 	}
-	return Mul;
-}
 
-Matrix& Matrix::operator/(const float b)
-{
-	for (int i = 0; i < N; i++)
+	Matrix Matrix::operator+(const Matrix& b) const
 	{
-		for (int j = 0; j < N; j++)
-		{
-			matrix[i][j] /= b;
-		}
+		Matrix Sum(N);
+		// Копирование данных из текущей матрицы в Sum
+		cblas_scopy(N * N, (*this)[0], 1, Sum[0], 1);
+		// Сложение с матрицей b
+		cblas_saxpy(N * N, 1.0f, b[0], 1, Sum[0], 1);
+		return Sum;
 	}
-	return (*this);
-}
 
-Matrix Matrix::calculate_R(Matrix& B)
-{
-	Matrix I(N);
-	I.to_single();
-	return I - B * (*this);
-}
-
-Matrix Matrix::calculate_B()
-{
-	float A1 = sum_max_column();
-	float A8 = sum_max_row();
-	return (*this).transpose_matrix() / (A1 * A8);
-}
-
-float Matrix::sum_max_row() // A8
-{
-	float max_sum = std::numeric_limits<float>::lowest();
-	for (int i = 0; i < N; i++) // i - строка, j - столобец
+	Matrix& Matrix::operator+=(const Matrix& b)
 	{
-		float Ai = 0; // сумма i ой строчки
-		for (int j = 0; j < N; j++)
-		{
-			Ai += matrix[i][j];
-		}
-		if (Ai > max_sum)
-		{
-			max_sum = Ai;
-		}
+		cblas_saxpy(N * N, 1.0, b[0], 1, (*this)[0], 1);
+		return (*this);
 	}
-	return max_sum;
-}
 
-float Matrix::sum_max_column() // A1
-{
-	float max_sum = std::numeric_limits<float>::lowest();
-	for (int j = 0; j < N; j++) // i - строка, j - столобец
+	Matrix Matrix::operator-(const Matrix& b) const
 	{
-		float Aj = 0; // сумма j ого столбца
-		for (int i = 0; i < N; i++)
-		{
-			Aj += matrix[i][j];
-		}
-		if (Aj > max_sum)
-		{
-			max_sum = Aj;
-		}
-	}
-	return max_sum;
-}
+		Matrix Diff(N);
 
-std::ostream& operator<<(std::ostream& os, const Matrix& obj)
-{
-	for (int i = 0; i < obj.N; i++)
-	{
-		for (int j = 0; j < obj.N; j++)
-		{
-			os << obj[i][j] << ' ';
-		}
-		os << '\n';
+		// Копирование данных из текущей матрицы в Diff
+		cblas_scopy(N * N, (*this)[0], 1, Diff[0], 1);
+
+		// Вычитание матрицы b
+		cblas_saxpy(N * N, -1.0f, b[0], 1, Diff[0], 1);
+
+		return Diff;
 	}
-	return os;
+
+	Matrix Matrix::operator*(const Matrix& b) const
+	{
+		Matrix Mul(N); // i - строка, j - столбец
+		cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, N, N, N, 1.0, b[0], N, (*this)[0], N, 0.0, Mul[0], N);
+		return Mul;
+	}
+
+	Matrix& Matrix::operator/(const float b)
+	{
+		cblas_sscal(N * N, 1.0f / b, (*this)[0], 1);
+		return (*this);
+	}
+
+	Matrix Matrix::calculate_R(Matrix& B)
+	{
+		Matrix I(N);
+		I.to_single();
+		return I - B * (*this);
+	}
+
+	Matrix Matrix::calculate_B()
+	{
+		float A1 = sum_max_column();
+		float A8 = sum_max_row();
+		return (*this).transpose_matrix() / (A1 * A8);
+	}
+
+	float Matrix::sum_max_row() // A8
+	{
+		float max_sum = std::numeric_limits<float>::lowest();
+		for (int i = 0; i < N; i++) // i - строка, j - столобец
+		{
+			float Ai = cblas_sasum(N, (*this)[i], 1); // сумма i ой строчки
+
+			if (Ai > max_sum)
+			{
+				max_sum = Ai;
+			}
+		}
+		return max_sum;
+	}
+
+	float Matrix::sum_max_column() // A1
+	{
+		float max_sum = std::numeric_limits<float>::lowest();
+		for (int j = 0; j < N; j++) // i - строка, j - столобец
+		{
+			float Aj = 0; // сумма j ого столбца
+			for (int i = 0; i < N; i++)
+			{
+				Aj += matrix[i][j];
+			}
+			if (Aj > max_sum)
+			{
+				max_sum = Aj;
+			}
+		}
+		return max_sum;
+	}
+
+	std::ostream& operator<<(std::ostream& os, const Matrix& obj)
+	{
+		for (int i = 0; i < obj.N; i++)
+		{
+			for (int j = 0; j < obj.N; j++)
+			{
+				os << obj[i][j] << ' ';
+			}
+			os << '\n';
+		}
+		return os;
+	}
+
 }

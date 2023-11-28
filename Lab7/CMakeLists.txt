@@ -8,9 +8,11 @@ set(exe_name Lab7)
 
 set(test_prim test_prim)
 set(test_vectoriz test_vectoriz)
+set(test_blas test_blas)
 
 set(Matrix_prim Matrix_prim)
 set(Matrix_vectoriz Matrix_vectoriz)
+set(Matrix_blas Matrix_blas)
 
 add_library(${Matrix_prim}
     src/Mul_Matrix_prim.cpp
@@ -18,6 +20,10 @@ add_library(${Matrix_prim}
 
 add_library(${Matrix_vectoriz}
     src/Mul_Matrix_vectoriz.cpp
+)
+
+add_library(${Matrix_blas}
+    src/Matrix_BLAS.cpp
 )
 
 target_include_directories(Matrix_prim
@@ -28,11 +34,17 @@ target_include_directories(Matrix_vectoriz
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
+target_include_directories(Matrix_blas
+    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
 add_executable(${exe_name} src/main.cpp)
 
 target_link_libraries(${PROJECT_NAME} ${Matrix_prim})
 
 target_link_libraries(${PROJECT_NAME} ${Matrix_vectoriz})
+
+target_link_libraries(${PROJECT_NAME} ${Matrix_blas})
 
 # ========== GoogleTest ==========
 
@@ -51,3 +63,7 @@ target_link_libraries(${test_prim} ${Matrix_prim})
 add_executable(${test_vectoriz} test/test2.cpp)
 target_link_libraries(${test_vectoriz} gtest_main)
 target_link_libraries(${test_vectoriz} ${Matrix_vectoriz})
+
+add_executable(${test_blas} test/test3.cpp)
+target_link_libraries(${test_blas} gtest_main)
+target_link_libraries(${test_blas} ${Matrix_blas})

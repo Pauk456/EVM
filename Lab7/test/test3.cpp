@@ -1,23 +1,24 @@
 #include "gtest/gtest.h"
-#include "Mul_matrix_vectoriz.h"
+#include "Matrix_BLAS.h"
 
 using namespace std;
 
-using namespace Matrix_vectoriz;
+using namespace Matrix_blas;
+
 // Max in row
 
 TEST(Matrix_max_row, LargeTest)
 {
 	int N = 100;
 	Matrix D(N);
-	for (int i = 0; i < N; i++) 
+	for (int i = 0; i < N; i++)
 	{
 		for (int j = 0; j < N; j++)
 		{
 			D[i][j] = 2 * i + j;
 		}
 	}
-	
+
 
 	// Find the maximum row sum
 	float maxRowSum = D.sum_max_row_TEST();
@@ -163,9 +164,9 @@ TEST(Matrix_sum, LargeTest)
 	// Matrix U
 	int N = 2048;
 	Matrix U(N);
-	for (int i = 0; i < N; i++) 
+	for (int i = 0; i < N; i++)
 	{
-		for (int j = 0; j < N; j++) 
+		for (int j = 0; j < N; j++)
 		{
 			U[i][j] = i + j + 3;
 		}
@@ -301,11 +302,11 @@ TEST(Matrix_rev, vectorizTest)
 {
 	int N = 16;
 	Matrix A(N);
-	for (int i = 0; i < N; ++i) 
+	for (int i = 0; i < N; ++i)
 	{
-		for (int j = 0; j < N; ++j) 
+		for (int j = 0; j < N; ++j)
 		{
-			if(i == j) 
+			if (i == j)
 			{
 				A[i][j] = 1;
 			}
@@ -318,7 +319,7 @@ TEST(Matrix_rev, vectorizTest)
 
 	Matrix AReverse = A;
 	AReverse.reverse_matrix(10000);
-	
+
 	Matrix I = A * AReverse;
 
 	for (int i = 0; i < N; ++i) {
