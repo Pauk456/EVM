@@ -280,7 +280,6 @@ float Matrix::sum_max_column() // A1 // Можно векторизовать
 			mSum2 = _mm_add_ps(mSum2, mStr2);
 			mSum3 = _mm_add_ps(mSum3, mStr3);
 		}
-
 		__m128 max1 = _mm_max_ps(mSum0, mSum1); // _mm_max_ps(4 1 2 3, 1 2 5 8) = 4 2 5 8 
 		__m128 max2 = _mm_max_ps(mSum2, mSum3); 
 		__m128 result = _mm_max_ps(max1, max2);
