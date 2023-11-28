@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.14)
 
 set(CMAKE_CXX_STANDARD 17)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
+
 project(Lab7)
 
 set(exe_name Lab7)
@@ -40,11 +42,7 @@ target_include_directories(Matrix_blas
 
 add_executable(${exe_name} src/main.cpp)
 
-target_link_libraries(${PROJECT_NAME} ${Matrix_prim})
-
-target_link_libraries(${PROJECT_NAME} ${Matrix_vectoriz})
-
-target_link_libraries(${PROJECT_NAME} ${Matrix_blas})
+target_link_libraries(${exe_name} ${Matrix_prim} ${Matrix_vectoriz} ${Matrix_blas} openblas) 
 
 # ========== GoogleTest ==========
 
@@ -57,13 +55,10 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 add_executable(${test_prim} test/test1.cpp )
-target_link_libraries(${test_prim} gtest_main)
-target_link_libraries(${test_prim} ${Matrix_prim})
+target_link_libraries(${test_prim} gtest_main ${Matrix_prim})
 
 add_executable(${test_vectoriz} test/test2.cpp)
-target_link_libraries(${test_vectoriz} gtest_main)
-target_link_libraries(${test_vectoriz} ${Matrix_vectoriz})
+target_link_libraries(${test_vectoriz} gtest_main ${Matrix_vectoriz})
 
 add_executable(${test_blas} test/test3.cpp)
-target_link_libraries(${test_blas} gtest_main)
-target_link_libraries(${test_blas} ${Matrix_blas})
+target_link_libraries(${test_blas} gtest_main ${Matrix_blas})

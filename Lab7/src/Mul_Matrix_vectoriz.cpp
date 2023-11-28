@@ -248,7 +248,7 @@ namespace Matrix_vectoriz
 		return (*this).transpose_matrix() / (A1 * A8);
 	}
 
-	float Matrix::sum_max_row() // A8 // ФУНКЦИЯ РАБОТАЕТ ТОЛЬКО ДЛЯ ВЫРАВНЕННЫХ ДАННЫХ
+	float Matrix::sum_max_row() // A8
 	{
 		float max_sum = std::numeric_limits<float>::lowest();
 		for (int i = 0; i < N; i++) // i - строка, j - столобец
@@ -260,10 +260,14 @@ namespace Matrix_vectoriz
 				Ai = _mm_add_ps(Ai, mV[j]);
 			}
 
-			__m128 TAi = _mm_hadd_ps(Ai, Ai); // 1 + 2, 3 + 4, 1 + 2, 3 + 4,
-			TAi = _mm_hadd_ps(TAi, TAi);
-			float Ai_sum;
-			_mm_store_ss(&Ai_sum, TAi);
+			//__m128 TAi = _mm_hadd_ps(Ai, Ai); // 1 + 2, 3 + 4, 1 + 2, 3 + 4,
+			//TAi = _mm_hadd_ps(TAi, TAi);
+			//float Ai_sum;
+			//_mm_store_ss(&Ai_sum, TAi);
+
+			float Max_sum_float[4];
+			_mm_storeu_ps(&Max_sum_float[0], Ai);
+			float Ai_sum = Max_sum_float[0] + Max_sum_float[1] + Max_sum_float[2] + Max_sum_float[3];
 
 			if (Ai_sum > max_sum)
 			{
@@ -275,11 +279,7 @@ namespace Matrix_vectoriz
 
 	float Matrix::sum_max_column() // A1 // Можно векторизовать
 	{
-		__m128 mMax_sum = _mm_set_ps(
-			std::numeric_limits<float>::lowest(),
-			std::numeric_limits<float>::lowest(),
-			std::numeric_limits<float>::lowest(),
-			std::numeric_limits<float>::lowest());
+		float max_sum_float = std::numeric_limits<float>::lowest();
 		for (int j = 0; j < N; j += 16) // i - строка, j - столобец
 		{
 			__m128 mSum0 = _mm_set1_ps(0);
@@ -297,23 +297,19 @@ namespace Matrix_vectoriz
 				mSum2 = _mm_add_ps(mSum2, mStr2);
 				mSum3 = _mm_add_ps(mSum3, mStr3);
 			}
-			__m128 max1 = _mm_max_ps(mSum0, mSum1); // _mm_max_ps(4 1 2 3, 1 2 5 8) = 4 2 5 8 
-			__m128 max2 = _mm_max_ps(mSum2, mSum3);
-			__m128 result = _mm_max_ps(max1, max2);
-			mMax_sum = _mm_max_ps(mMax_sum, result);
-		}
-
-		float max_sum_float = std::numeric_limits<float>::lowest();
-		float Max_sum_float[4];
-		_mm_storeu_ps(Max_sum_float, mMax_sum);
-		for (int i = 0; i < 4; i++)
-		{
-			if (Max_sum_float[i] > max_sum_float)
+			float Max_sum_float[16];
+			_mm_storeu_ps(&Max_sum_float[0], mSum0);
+			_mm_storeu_ps(&Max_sum_float[4], mSum1);
+			_mm_storeu_ps(&Max_sum_float[8], mSum2);
+			_mm_storeu_ps(&Max_sum_float[12], mSum3);
+			for (int i = 0; i < 16; i++)
 			{
-				max_sum_float = Max_sum_float[i];
+				if (Max_sum_float[i] > max_sum_float)
+				{
+					max_sum_float = Max_sum_float[i];
+				}
 			}
 		}
-		return max_sum_float;
 	}
 
 	std::ostream& operator<<(std::ostream& os, const Matrix& obj)

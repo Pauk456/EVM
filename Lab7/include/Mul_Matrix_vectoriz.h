@@ -3,6 +3,7 @@
 #include <iostream>
 #include <xmmintrin.h>
 #include <pmmintrin.h>
+#include <emmintrin.h>
 #include <limits>
 
 namespace Matrix_vectoriz
