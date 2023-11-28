@@ -252,7 +252,7 @@ TEST(Matrix_sub, LargeTest)
 TEST(Matrix_trsp, LargeTest)
 {
 	// Matrix P
-	int N = 1024; //1024
+	int N = 1024 * 4; //1024
 	Matrix A(N);
 	for (int i = 0; i < N; ++i)
 	{

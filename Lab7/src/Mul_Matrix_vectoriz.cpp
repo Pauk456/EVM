@@ -46,81 +46,27 @@ void Matrix::reverse_matrix(int M)
 	(*this) = (*this) * B;
 }
 
-//Matrix Matrix::transpose_matrix() const {
-//	Matrix T(N);
-//	for (int i = 0; i < N; i += 4)
-//	{
-//		for (int j = 0; j < N; j += 4)
-//		{
-//			__m128 ml0 = _mm_loadu_ps(&(*this)[i][j]);
-//			__m128 ml1 = _mm_loadu_ps(&(*this)[i + 1][j]);
-//			__m128 ml2 = _mm_loadu_ps(&(*this)[i + 2][j]);
-//			__m128 ml3 = _mm_loadu_ps(&(*this)[i + 3][j]);
-//			float Float[16];
-//			_mm_store_ps(&Float[0], ml0);
-//			_mm_store_ps(&Float[4], ml1);
-//			_mm_store_ps(&Float[8], ml2);
-//			_mm_store_ps(&Float[12], ml3);
-//			for (int k = 0; k < 4; k++)
-//			{
-//				T[j + k][i] = Float[k];
-//				T[j + k][i + 1] = Float[k + 4];
-//				T[j + k][i + 2] = Float[k + 8];
-//				T[j + k][i + 3] = Float[k + 12];
-//			}
-//		}
-//	}
-//	return T;
-//}
-
 Matrix Matrix::transpose_matrix() const {
 	Matrix T(N);
 	for (int i = 0; i < N; i += 4)
 	{
-		for (int j = 0; j < N; j+= 16)
+		for (int j = 0; j < N; j += 4)
 		{
-			__m128 ml00 = _mm_loadu_ps(&(*this)[i][j]);
-			__m128 ml01 = _mm_loadu_ps(&(*this)[i][j + 4]);
-			__m128 ml02 = _mm_loadu_ps(&(*this)[i][j + 8]);
-			__m128 ml03 = _mm_loadu_ps(&(*this)[i][j + 12]);
-			__m128 ml10 = _mm_loadu_ps(&(*this)[i + 1][j]);
-			__m128 ml11 = _mm_loadu_ps(&(*this)[i + 1][j + 4]);
-			__m128 ml12 = _mm_loadu_ps(&(*this)[i + 1][j + 8]);
-			__m128 ml13 = _mm_loadu_ps(&(*this)[i + 1][j + 12]);
-			__m128 ml20 = _mm_loadu_ps(&(*this)[i + 2][j]);
-			__m128 ml21 = _mm_loadu_ps(&(*this)[i + 2][j + 4]);
-			__m128 ml22 = _mm_loadu_ps(&(*this)[i + 2][j + 8]);
-			__m128 ml23 = _mm_loadu_ps(&(*this)[i + 2][j + 12]);
-			__m128 ml30 = _mm_loadu_ps(&(*this)[i + 3][j]);
-			__m128 ml31 = _mm_loadu_ps(&(*this)[i + 3][j + 4]);
-			__m128 ml32 = _mm_loadu_ps(&(*this)[i + 3][j + 8]);
-			__m128 ml33 = _mm_loadu_ps(&(*this)[i + 3][j + 12]);
-			float Float[4 * 4 * 4];
-			_mm_store_ps(&Float[0 * 16 + 0], ml00);
-			_mm_store_ps(&Float[0 * 16 + 4], ml10);
-			_mm_store_ps(&Float[0 * 16 + 8], ml20);
-			_mm_store_ps(&Float[0 * 16 + 12], ml30);
-			_mm_store_ps(&Float[1 * 16 + 0], ml01);
-			_mm_store_ps(&Float[1 * 16 + 4], ml11);
-			_mm_store_ps(&Float[1 * 16 + 8], ml21);
-			_mm_store_ps(&Float[1 * 16 + 12], ml31);
-			_mm_store_ps(&Float[2 * 16 + 0], ml02);
-			_mm_store_ps(&Float[2 * 16 + 4], ml12); 
-			_mm_store_ps(&Float[2 * 16 + 8], ml22);
-			_mm_store_ps(&Float[2 * 16 + 12], ml32);
-			_mm_store_ps(&Float[3 * 16 + 0], ml03);
-			_mm_store_ps(&Float[3 * 16 + 4], ml13);
-			_mm_store_ps(&Float[3 * 16 + 8], ml23);
-			_mm_store_ps(&Float[3 * 16 + 12], ml33);
-			for (int k0 = 0; k0 < 4; k0++)
+			__m128 ml0 = _mm_loadu_ps(&(*this)[i][j]);
+			__m128 ml1 = _mm_loadu_ps(&(*this)[i + 1][j]);
+			__m128 ml2 = _mm_loadu_ps(&(*this)[i + 2][j]);
+			__m128 ml3 = _mm_loadu_ps(&(*this)[i + 3][j]);
+			float Float[16];
+			_mm_store_ps(&Float[0], ml0);
+			_mm_store_ps(&Float[4], ml1);
+			_mm_store_ps(&Float[8], ml2);
+			_mm_store_ps(&Float[12], ml3);
+			for (int k = 0; k < 4; k++)
 			{
-				for (int k1 = 0; k1 < 4; k1++)
-				{
-					T[j + (k0 * 4) + k1][i] = Float[(k0 * 16) + k1];
-					T[j + (k0 * 4) + k1][i + 1] = Float[(k0 * 16) + k1 + 4];
-					T[j + (k0 * 4) + k1][i + 2] = Float[(k0 * 16) + k1 + 8];
-					T[j + (k0 * 4) + k1][i + 3] = Float[(k0 * 16) + k1 + 12];
-				}
+				T[j + k][i] = Float[k];
+				T[j + k][i + 1] = Float[k + 4];
+				T[j + k][i + 2] = Float[k + 8];
+				T[j + k][i + 3] = Float[k + 12];
 			}
 		}
 	}
@@ -302,7 +248,7 @@ Matrix Matrix::calculate_B()
 
 float Matrix::sum_max_row() // A8 // ÔÓÍÊÖÈß ÐÀÁÎÒÀÅÒ ÒÎËÜÊÎ ÄËß ÂÛÐÀÂÍÅÍÍÛÕ ÄÀÍÍÛÕ
 {
-	float max_sum = -9999999.0;
+	float max_sum = std::numeric_limits<float>::min();
 	for (int i = 0; i < N; i++) // i - ñòðîêà, j - ñòîëîáåö
 	{
 		__m128 Ai = _mm_set1_ps(0);
