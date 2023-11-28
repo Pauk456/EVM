@@ -3,6 +3,7 @@
 #include <iostream>
 #include <xmmintrin.h>
 #include <pmmintrin.h>
+#include <limits>
 
 class Matrix
 {

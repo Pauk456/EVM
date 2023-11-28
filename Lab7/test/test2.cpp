@@ -36,7 +36,7 @@ TEST(Matrix_max_row, LargeTest)
 TEST(Matrix_max_col, LargeTest1)
 {
 	// Matrix D with random values
-	int N = 512;
+	int N = 2048 * 4;
 	Matrix D(N);
 	for (int i = 0; i < N; i++)
 	{
@@ -62,7 +62,7 @@ TEST(Matrix_max_col, LargeTest1)
 TEST(Matrix_max_col, LargeTest2)
 {
 	// Matrix D with random values
-	int N = 512;
+	int N = 2048 * 4;
 	Matrix D(N);
 	for (int i = 0; i < N; i++)
 	{
@@ -160,7 +160,7 @@ TEST(Matrix_division_const, LargeTest)
 TEST(Matrix_sum, LargeTest)
 {
 	// Matrix U
-	int N = 128;
+	int N = 2048;
 	Matrix U(N);
 	for (int i = 0; i < N; i++) 
 	{

@@ -73,19 +73,13 @@ Matrix Matrix::operator+(const Matrix& b) const
 {
 	Matrix Sum(N);
 
-	__m128* mRes = (__m128*)Sum[0];
+	__m128* mRes0 = (__m128*)Sum[0];
 	__m128* mA = (__m128*)(*this)[0];
 	__m128* mB = (__m128*)b[0];
 
-	for (int i = 0; i < (N * N) / 4; i++)
+	for (int i = 0; i < (N * N) / 4; i += 1)
 	{
-		mRes[i] = _mm_add_ps(mA[i], mB[i]);
-	}
-	for (int i = ((N * N) / 4) * 4; i < (N * N); i++)
-	{
-		int row = i / N;
-		int col = i % N;
-		Sum[row][col] = (*this)[row][col] + b[row][col];
+		mRes0[i] = _mm_add_ps(mA[i], mB[i]);
 	}
 	return Sum;
 }
@@ -100,13 +94,6 @@ Matrix& Matrix::operator+=(const Matrix& b) // Можно векторизовать
 	{
 		mRes[i] = _mm_add_ps(mA[i], mB[i]);
 	}
-	for (int i = ((N * N) / 4) * 4; i < (N * N); i++)
-	{
-		int row = i / N;
-		int col = i % N;
-		(*this)[row][col] = (*this)[row][col] + b[row][col];
-	}
-
 	return (*this);
 }
 
@@ -121,12 +108,6 @@ Matrix Matrix::operator-(const Matrix& b) const// Можно векторизовать
 	for (int i = 0; i < (N * N) / 4; i++)
 	{	
 		mRes[i] = _mm_sub_ps(mA[i], mB[i]);
-	}
-	for (int i = ((N * N) / 4) * 4; i < (N * N); i++)
-	{
-		int row = i / N;
-		int col = i % N;
-		Sub[row][col] = (*this)[row][col] - b[row][col];
 	}
 	return Sub;
 }
@@ -205,20 +186,17 @@ Matrix Matrix::operator*(const Matrix& b) const // Можно векторизовать
 	}
 	return Mul;
 }
+
 Matrix& Matrix::operator/(const float b) 
 {
 	__m128 *mRes = (__m128*)(*this)[0];
 	__m128 mdivisor = _mm_set1_ps(b);
+
 	for (int i = 0; i < (N * N) / 4; i++)
 	{
 		mRes[i] = _mm_div_ps(mRes[i], mdivisor);
 	}
-	for (int i = ((N * N) / 4) * 4; i < (N * N); i++)
-	{
-		int row = i / N;
-		int col = i % N;
-		(*this)[row][col] /=  b;
-	}
+
 	return (*this);
 }
 
@@ -267,12 +245,8 @@ float Matrix::sum_max_row() // A8 // ФУНКЦИЯ РАБОТАЕТ ТОЛЬКО ДЛЯ ВЫРАВНЕННЫХ ДАН
 
 		__m128 TAi = _mm_hadd_ps(Ai, Ai); // 1 + 2, 3 + 4, 1 + 2, 3 + 4,
 		TAi = _mm_hadd_ps(TAi, TAi);
-		float Ai_sum = 0;
+		float Ai_sum;
 		_mm_store_ss(&Ai_sum, TAi);
-
-		for (int j = (N / 4) * 4; j < N; j++) {
-			Ai_sum += (*this)[i][j];
-		}
 
 		if (Ai_sum > max_sum)
 		{
@@ -284,20 +258,46 @@ float Matrix::sum_max_row() // A8 // ФУНКЦИЯ РАБОТАЕТ ТОЛЬКО ДЛЯ ВЫРАВНЕННЫХ ДАН
 
 float Matrix::sum_max_column() // A1 // Можно векторизовать
 {
-	float max_sum = -9999999.0;
-	for (int j = 0; j < N; j++) // i - строка, j - столобец
+	__m128 mMax_sum = _mm_set_ps(
+		std::numeric_limits<float>::min(), 
+		std::numeric_limits<float>::min(),
+		std::numeric_limits<float>::min(),
+		std::numeric_limits<float>::min());
+	for (int j = 0; j < N; j += 16) // i - строка, j - столобец
 	{
-		float Aj = 0;
+		__m128 mSum0 = _mm_set1_ps(0);
+		__m128 mSum1 = _mm_set1_ps(0);
+		__m128 mSum2 = _mm_set1_ps(0);
+		__m128 mSum3 = _mm_set1_ps(0);
 		for (int i = 0; i < N; i++)
 		{
-			Aj += (*this)[i][j];
+			__m128 mStr0 = _mm_loadu_ps(&(*this)[i][j]);
+			__m128 mStr1 = _mm_loadu_ps(&(*this)[i][j + 4]);
+			__m128 mStr2 = _mm_loadu_ps(&(*this)[i][j + 8]);
+			__m128 mStr3 = _mm_loadu_ps(&(*this)[i][j + 12]);
+			mSum0 = _mm_add_ps(mSum0, mStr0);
+			mSum1 = _mm_add_ps(mSum1, mStr1);
+			mSum2 = _mm_add_ps(mSum2, mStr2);
+			mSum3 = _mm_add_ps(mSum3, mStr3);
 		}
-		if (Aj > max_sum)
+
+		__m128 max1 = _mm_max_ps(mSum0, mSum1); // _mm_max_ps(4 1 2 3, 1 2 5 8) = 4 2 5 8 
+		__m128 max2 = _mm_max_ps(mSum2, mSum3); 
+		__m128 result = _mm_max_ps(max1, max2);
+		mMax_sum = _mm_max_ps(mMax_sum, result);
+	}
+
+	float max_sum_float = std::numeric_limits<float>::min();
+	float Max_sum_float[4];
+	_mm_storeu_ps(Max_sum_float, mMax_sum);
+	for (int i = 0; i < 4; i++)
+	{
+		if (Max_sum_float[i] > max_sum_float)
 		{
-			max_sum = Aj;
+			max_sum_float = Max_sum_float[i];
 		}
 	}
-	return max_sum;
+	return max_sum_float;
 }
 
 std::ostream& operator<<(std::ostream& os, const Matrix& obj)
