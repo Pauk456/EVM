@@ -36,7 +36,7 @@ TEST(Matrix_max_row, LargeTest)
 TEST(Matrix_max_col, LargeTest1)
 {
 	// Matrix D with random values
-	int N = 2048 * 4;
+	int N = 1024;
 	Matrix D(N);
 	for (int i = 0; i < N; i++)
 	{
@@ -62,7 +62,7 @@ TEST(Matrix_max_col, LargeTest1)
 TEST(Matrix_max_col, LargeTest2)
 {
 	// Matrix D with random values
-	int N = 2048 * 4;
+	int N = 1024;
 	Matrix D(N);
 	for (int i = 0; i < N; i++)
 	{
@@ -89,7 +89,7 @@ TEST(Matrix_max_col, LargeTest2)
 
 TEST(Matrix_mul, LargeTest)
 {
-	int N = 128; //1024
+	int N = 1024; //1024
 	Matrix A(N);
 	for (int i = 0; i < N; ++i)
 	{
@@ -252,7 +252,7 @@ TEST(Matrix_sub, LargeTest)
 TEST(Matrix_trsp, LargeTest)
 {
 	// Matrix P
-	int N = 16; //1024
+	int N = 1024; //1024
 	Matrix A(N);
 	for (int i = 0; i < N; ++i)
 	{
