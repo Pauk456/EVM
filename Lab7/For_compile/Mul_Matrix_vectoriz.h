@@ -1,11 +1,12 @@
 #pragma once
 #include <vector>
 #include <iostream>
+#include <xmmintrin.h>
+#include <pmmintrin.h>
+#include <emmintrin.h>
 #include <limits>
-#include <cstring>
-#include <cblas.h>
 
-namespace Matrix_blas
+namespace Matrix_vectoriz
 {
 	class Matrix
 	{
