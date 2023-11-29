@@ -5,7 +5,7 @@
 #include "Mul_Matrix_prim.cpp"
 #include <time.h>
 
-double time_prim(int N)
+double time_prim(int N, int M)
 {
 	double time_spent = 0.0;
 	clock_t begin = clock();
@@ -27,14 +27,14 @@ double time_prim(int N)
 	}
 
 	Matrix_prim::Matrix AReverse = A;
-	AReverse.reverse_matrix(10000);
+	AReverse.reverse_matrix(M);
 
 	clock_t end = clock();
 	time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
 	return time_spent;
 }
 
-double time_vectoriz(int N)
+double time_vectoriz(int N, int M)
 {
 	double time_spent = 0.0;
 	clock_t begin = clock();
@@ -56,14 +56,14 @@ double time_vectoriz(int N)
 	}
 
 	Matrix_vectoriz::Matrix AReverse = A;
-	AReverse.reverse_matrix(10000);
+	AReverse.reverse_matrix(M);
 
 	clock_t end = clock();
 	time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
 	return time_spent;
 }
 
-double time_blas(int N)
+double time_blas(int N, int M)
 {
 	double time_spent = 0.0;
 	clock_t begin = clock();
@@ -85,7 +85,7 @@ double time_blas(int N)
 	}
 
 	Matrix_blas::Matrix AReverse = A;
-	AReverse.reverse_matrix(10000);
+	AReverse.reverse_matrix(M);
 
 	clock_t end = clock();
 	time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
@@ -93,8 +93,9 @@ double time_blas(int N)
 }
 
 int main() {
-	int N = 16;
-	std::cout << time_prim(N) << '\n';
-	std::cout << time_vectoriz(N) << '\n';
-	std::cout << time_blas(N) << '\n';
+	int N = 2048;
+	int M = 10;
+	std::cout << time_prim(N, M) << '\n';
+	std::cout << time_vectoriz(N, M) << '\n';
+	std::cout << time_blas(N, M) << '\n';
 }
