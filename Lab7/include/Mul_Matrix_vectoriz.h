@@ -1,4 +1,5 @@
 #pragma once
+#include "Mul_Matrix_prim.h"
 #include <vector>
 #include <iostream>
 #include <xmmintrin.h>
@@ -30,6 +31,17 @@ namespace Matrix_vectoriz
 		float sum_max_row_TEST() { return sum_max_row(); }
 		float sum_max_column_TEST() { return sum_max_column(); }
 		//
+
+		void copy(Matrix_prim::Matrix& copy)
+		{
+			for (int i = 0; i < N; i++)
+			{
+				for (int j = 0; j < N; j++)
+				{
+					(*this)[i][j] = copy[i][j];
+				}
+			}
+		}
 
 		float* operator[](int row)
 		{

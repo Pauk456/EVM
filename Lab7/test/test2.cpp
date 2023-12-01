@@ -1,5 +1,7 @@
 #include "gtest/gtest.h"
 #include "Mul_matrix_vectoriz.h"
+#include "Mul_Matrix_prim.h"
+
 
 using namespace std;
 
@@ -87,6 +89,80 @@ TEST(Matrix_max_col, LargeTest2)
 }
 
 // Matrix multiplication
+TEST(Matrix_mul, LargeTest)
+{
+	int N = 1024; //1024
+	Matrix_vectoriz::Matrix VECTORIZ_M1(N);
+	for (int i = 0; i < N; ++i)
+	{
+		for (int j = 0; j < N; ++j)
+		{
+			if (i == j)
+			{
+				VECTORIZ_M1[i][j] = 1;
+			}
+			else
+			{
+				VECTORIZ_M1[i][j] = i + j - 4;
+			}
+		}
+	}
+	Matrix_vectoriz::Matrix VECTORIZ_M2(N);
+	for (int i = 0; i < N; ++i)
+	{
+		for (int j = 0; j < N; ++j)
+		{
+			if (i == j)
+			{
+				VECTORIZ_M2[i][j] = 1;
+			}
+			else
+			{
+				VECTORIZ_M2[i][j] = i;
+			}
+		}
+	}
+	Matrix_vectoriz::Matrix VECTORIZ_RES = VECTORIZ_M1 * VECTORIZ_M2;
+
+	Matrix_prim::Matrix PRIM_M1(N);
+	for (int i = 0; i < N; ++i)
+	{
+		for (int j = 0; j < N; ++j)
+		{
+			if (i == j)
+			{
+				PRIM_M1[i][j] = 1;
+			}
+			else
+			{
+				PRIM_M1[i][j] = i + j - 4;
+			}
+		}
+	}
+	Matrix_prim::Matrix PRIM_M2(N);
+	for (int i = 0; i < N; ++i)
+	{
+		for (int j = 0; j < N; ++j)
+		{
+			if (i == j)
+			{
+				PRIM_M2[i][j] = 1;
+			}
+			else
+			{
+				PRIM_M2[i][j] = i;
+			}
+		}
+	}
+	Matrix_prim::Matrix PRIM_RES = PRIM_M1 * PRIM_M2;
+
+	for (int i = 0; i < N; ++i) {
+		for (int j = 0; j < N; ++j) {
+			EXPECT_EQ(PRIM_RES[i][j], VECTORIZ_RES[i][j]);
+		}
+	}
+}
+
 
 TEST(Matrix_mul, LargeTest)
 {

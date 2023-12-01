@@ -16,12 +16,6 @@ set(Matrix_prim Matrix_prim)
 set(Matrix_vectoriz Matrix_vectoriz)
 set(Matrix_blas Matrix_blas)
 
-set(Boost_INCLUDE_DIR /usr/local/include/openblas)
-set(Boost_LIBRARY_DIR /usr/local/lib)
-find_package(OpenBLAS)
-include_directories(${Boost_INCLUDE_DIR})
-link_directories(${Boost_LIBRARY_DIR})
-
 add_library(${Matrix_prim}
     src/Mul_Matrix_prim.cpp
 )
@@ -64,7 +58,7 @@ add_executable(${test_prim} test/test1.cpp )
 target_link_libraries(${test_prim} gtest_main ${Matrix_prim})
 
 add_executable(${test_vectoriz} test/test2.cpp)
-target_link_libraries(${test_vectoriz} gtest_main ${Matrix_vectoriz})
+target_link_libraries(${test_vectoriz} gtest_main ${Matrix_vectoriz} ${Matrix_prim})
 
 add_executable(${test_blas} test/test3.cpp)
 target_link_libraries(${test_blas} gtest_main ${Matrix_blas})
