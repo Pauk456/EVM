@@ -30,6 +30,14 @@ namespace Matrix_vectoriz
 		}
 	}
 
+	Matrix::Matrix(Matrix&& other)
+	{
+		matrix = other.matrix;
+		N = other.N;
+		other.matrix = nullptr;
+		other.N = 0;
+	}
+
 	void Matrix::reverse_matrix(int M)
 	{
 		Matrix B = calculate_B();

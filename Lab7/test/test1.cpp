@@ -491,3 +491,42 @@ TEST(Matrix_rev, test4)
 	EXPECT_NEAR(A[1][0], 0, 0.5);	EXPECT_NEAR(A[1][1], -1, 0.5);	EXPECT_NEAR(A[1][2], 1, 0.51);
 	EXPECT_NEAR(A[2][0], -1, 0.5);	EXPECT_NEAR(A[2][1], 1, 0.5);	EXPECT_NEAR(A[2][2], 0, 0.5);
 }
+
+TEST(Matrix_rev, LargeTest)
+{
+	int N = 64;
+	Matrix A(N);
+	for (int i = 0; i < N; ++i)
+	{
+		for (int j = 0; j < N; ++j)
+		{
+			if (i == j)
+			{
+				A[i][j] = 1;
+			}
+			else
+			{
+				A[i][j] = i + j + 1;
+			}
+		}
+	}
+
+	Matrix AReverse = A;
+	AReverse.reverse_matrix(500);
+
+	Matrix I = A * AReverse;
+
+	for (int i = 0; i < N; ++i) {
+		for (int j = 0; j < N; ++j) {
+			if (i == j) {
+				float tset = I[i][j];
+				EXPECT_NEAR(I[i][j], 1.0, 1);
+			}
+			else {
+				float tset = I[i][j];
+				EXPECT_NEAR(I[i][j], 0.0, 1);
+			}
+		}
+	}
+}
+
