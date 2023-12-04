@@ -19,6 +19,7 @@ namespace Matrix_prim
 		Matrix(int N);
 		~Matrix();
 		Matrix(const Matrix& other);
+		Matrix(Matrix&& other);
 		void reverse_matrix(int M);
 		Matrix transpose_matrix() const;
 		void to_single();

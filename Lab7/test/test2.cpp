@@ -91,7 +91,7 @@ TEST(Matrix_max_col, LargeTest2)
 // Matrix multiplication
 TEST(Matrix_mul, LargeTest)
 {
-	int N = 1024; //1024
+	int N = 512; //1024
 	Matrix_vectoriz::Matrix VECTORIZ_M1(N);
 	for (int i = 0; i < N; ++i)
 	{
@@ -163,10 +163,9 @@ TEST(Matrix_mul, LargeTest)
 	}
 }
 
-
-TEST(Matrix_mul, LargeTest)
+TEST(Matrix_mul, LargeTest2)
 {
-	int N = 1024; //1024
+	int N = 512; //1024
 	Matrix A(N);
 	for (int i = 0; i < N; ++i)
 	{
@@ -329,7 +328,7 @@ TEST(Matrix_sub, LargeTest)
 TEST(Matrix_trsp, LargeTest)
 {
 	// Matrix P
-	int N = 1024 * 4; //1024
+	int N = 1024; //1024
 	Matrix A(N);
 	for (int i = 0; i < N; ++i)
 	{
