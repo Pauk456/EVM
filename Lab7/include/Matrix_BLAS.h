@@ -31,6 +31,9 @@ namespace Matrix_blas
 		float sum_max_column_TEST() { return sum_max_column(); }
 		//
 
+		template <typename Mat>
+		void copy(Mat& copy);
+
 		float* operator[](int row)
 		{
 			return &matrix[row * N];
