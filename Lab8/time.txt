@@ -1,0 +1,80 @@
+N = 256
+Asc: N = 1024, Tick = 13
+Desc: N = 1024, Tick = 16
+Random: N = 1024, Tick = 12
+
+N = 512
+Asc: N = 2048, Tick = 13
+Desc: N = 2048, Tick = 13
+Random: N = 2048, Tick = 13
+
+N = 1024
+Asc: N = 4096, Tick = 13
+Desc: N = 4096, Tick = 16
+Random: N = 4096, Tick = 16
+
+N = 2048
+Asc: N = 8192, Tick = 16
+Desc: N = 8192, Tick = 15
+Random: N = 8192, Tick = 16
+
+N = 4096
+Asc: N = 16384, Tick = 15
+Desc: N = 16384, Tick = 16
+Random: N = 16384, Tick = 16
+
+N = 8192
+Asc: N = 32768, Tick = 15
+Desc: N = 32768, Tick = 15
+Random: N = 32768, Tick = 16
+
+N = 16384
+Asc: N = 65536, Tick = 14
+Desc: N = 65536, Tick = 13
+Random: N = 65536, Tick = 43
+
+N = 32768
+Asc: N = 131072, Tick = 13
+Desc: N = 131072, Tick = 13
+Random: N = 131072, Tick = 26
+
+N = 65536
+Asc: N = 262144, Tick = 15
+Desc: N = 262144, Tick = 15
+Random: N = 262144, Tick = 38
+
+N = 131072
+Asc: N = 524288, Tick = 16
+Desc: N = 524288, Tick = 16
+Random: N = 524288, Tick = 51
+
+N = 262144
+Asc: N = 1048576, Tick = 16
+Desc: N = 1048576, Tick = 16
+Random: N = 1048576, Tick = 76
+
+N = 524288
+Asc: N = 2097152, Tick = 15
+Desc: N = 2097152, Tick = 15
+Random: N = 2097152, Tick = 102
+
+N = 1048576
+Asc: N = 4194304, Tick = 16
+Desc: N = 4194304, Tick = 15
+Random: N = 4194304, Tick = 111
+
+N = 2097152
+Asc: N = 8388608, Tick = 15
+Desc: N = 8388608, Tick = 15
+Random: N = 8388608, Tick = 186
+
+N = 4194304
+Asc: N = 16777216, Tick = 15
+Desc: N = 16777216, Tick = 15
+Random: N = 16777216, Tick = 317
+
+N = 8388608
+Asc: N = 33554432, Tick = 15
+Desc: N = 33554432, Tick = 15
+Random: N = 33554432, Tick = 437
+
