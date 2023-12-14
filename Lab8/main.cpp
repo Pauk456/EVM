@@ -1,8 +1,15 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <ctime>
 
 using namespace std;
+
+unsigned long long rdtsc() {
+    unsigned int low, high;
+    asm volatile ("rdtsc" : "=a" (low), "=d" (high));
+    return ((unsigned long long)high << 32) | low;
+}
 
 void direct(vector<int> Array, const long long N)
 {
@@ -35,7 +42,7 @@ void random(vector<int> Array, const long long N)
 }
 
 int test(vector<int> Array, const long long N, const int K, 
-    void (*create_function)(vector<int> Array, const long long N))
+    void (*create_function)(vector<int> Array, const long long N), ofstream& out)
 {
     create_function(Array, N);
     int k;
@@ -44,20 +51,26 @@ int test(vector<int> Array, const long long N, const int K,
     {
         k = Array[k];
     }
-    unsigned long long start = __builtin_ia32_rdtsc();
+    //unsigned long long start = __builtin_ia32_rdtsc();
+    unsigned long long start = rdtsc();
     for (k = 0, i = 0; i < N * K; i++) 
     {
         k = Array[k];
     }
-    unsigned long long end = __builtin_ia32_rdtsc();
-    cout << " N = " << N * 4 << ", "
-        << "Tick = " << ((end - start) / N / K) << '\n';
+    //unsigned long long end = __builtin_ia32_rdtsc();
+    unsigned long long end = rdtsc();
+    out << " N = " << N * 4 << ", "
+        << "Tick = " << ((end - start)) << '\n';
          
     return k;
 }
 
 int main() 
 {
+    ofstream out("time.txt");
+    if (!out) {
+       return 0;
+    }
     const long long Nmin = 1024 / sizeof(int);
     const long long Nmax = 32 * 1024 * 1024LL / sizeof(int);
     const int K = 10;
@@ -66,14 +79,14 @@ int main()
 
     for (int N = Nmin; N <= Nmax; N *= 2) 
     {
-        printf("N = %d\n", N);
-        cout << "N = " << N << "\n";
-        cout << "direct: ";
-        test(Array, N, K, direct);
-        cout << "reverse: ";
-        test(Array, N, K, reverse);
-        cout << "random: ";
-        test(Array, N, K, random);
-        cout << '\n';
+        out << "N = " << N << "\n";
+        out << "direct: ";
+        test(Array, N, K, direct, out);
+        out << "reverse: ";
+        test(Array, N, K, reverse, out);
+        out << "random: ";
+        test(Array, N, K, random, out);
+        out << '\n';
     }
+    out.close();
 }
